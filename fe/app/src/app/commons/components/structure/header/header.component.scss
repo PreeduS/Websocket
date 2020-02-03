@@ -1,0 +1,17 @@
+.header{
+    display: flex;;
+    border-bottom: 1px solid gray;
+    height: 3rem;
+    background: #2f3640;
+}
+
+a.item{
+    display: flex;
+    margin: 0 1rem;
+    color: white;
+    text-decoration: none;
+    outline: none;
+    > span{
+        margin: auto;
+    }
+}

@@ -1,0 +1,28 @@
+<button id = "send">Send</button>
+<div id = "messages">
+
+</div>
+<script>
+
+    const socket = new WebSocket('ws://localhost:5001');
+    socket.onopen = (event) => {
+        console.log('onopen event:', event)
+        // setTimeout(() => {
+        //     socket.send('test')
+        // }, 2000);
+    }
+
+    socket.onmessage = (event) => {
+        console.log('onmessage event', event)
+        const { data } = event;
+        var newDiv = document.createElement("div"); 
+        var newContent = document.createTextNode(data); 
+        newDiv.appendChild(newContent);  
+        document.querySelector('#messages').appendChild(newDiv)
+    }
+
+    document.querySelector('#send').addEventListener('click',()=>{
+        socket.send('test ' + Math.random().toFixed(2))
+    })
+
+</script>

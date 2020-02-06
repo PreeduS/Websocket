@@ -1,0 +1,5 @@
+{
+    "ignore": ["**/*.test.ts", "**/*.spec.ts", "build","node_modules"],
+    "exec": "ts-node ./index.ts",
+    "ext": "ts"
+  }

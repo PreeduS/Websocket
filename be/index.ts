@@ -1,13 +1,34 @@
 import express from 'express';
 import WebSocket from 'ws';
+import mongoose from 'mongoose';
+import passport from 'passport';
+
+import setPassport from './auth/localStrategy/localStrategy';
+const setRoutes = require('./routes').default
+
+
+
 const app = express();
 const port = process.env.PORT || 5000;
+
+setPassport()
+setRoutes(app)
 
 // ws
 const server = WebSocket.Server;
 const wsServer = new server({
     port: 5001
 })
+
+
+// db
+
+mongoose.connect('mongodb://localhost:27017/app', {useNewUrlParser: true}).then( ()=>{
+    console.log('connected')
+}, err =>{
+    console.log('err: ',err)
+});
+
 
 
 // temp code

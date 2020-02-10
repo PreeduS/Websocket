@@ -1,0 +1,60 @@
+,
+  "_moduleAliases": {
+    "app": "app"
+  }
+
+
+
+=
+
+  --------
+
+  tsconfig.json
+
+        "paths": {
+            "*": [
+                "node_modules/*",
+                //"types/*"
+            ],
+            "app/*": ["./app/*"]
+            
+        }
+
+
+      //"include": [
+    //    "src/**/*"
+    //],
+
+
+----
+
+    "start": "npm run build && node -r ./prod-paths.js ./build/index.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register --no-notify --files index.ts",
+
+
+    "start": "npm run build && node ./build/index.js",
+
+    "start": "npm run build && node -r ./setupAlias.js  ./build/index.js",
+    "dev": "ts-node-dev --no-notify -r ./setupAlias.js --files index.ts",
+
+    "dev_prev": "ts-node-dev --no-notify index.ts",
+    "dev:nodemon": "nodemon",
+
+       "wp:start": "webpack && node -r ./setupAlias.js  ./build-wp/index.js", 
+
+    "__dev": "webpack -w && ts-node-dev --no-notify build-wp/index.ts",
+
+       
+----
+
+remove:
+
+module-alias/register
+
+nodemon
+
+
+
+
+
+    

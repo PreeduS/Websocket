@@ -3,6 +3,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
 const setupPassport = () => {
+    // todo remove LocalStrategy
    passport.use(
        new LocalStrategy({
         usernameField: 'username',
@@ -44,7 +45,7 @@ const setupPassport = () => {
     }, async (payload, done) => {
         console.log('jwt payload ', payload)
 
-        return done(null, 'tempp');    
+        return done(null, payload);    
        /* try{
             //find user in db
             const {user} = payload;

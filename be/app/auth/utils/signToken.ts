@@ -4,11 +4,11 @@ const jwt = {
     secret: 'secret'
 }
 
-const signToken = (payload: any) => {
-    const token = JWT.sign({
+const signToken = (payload: object) => {
+    const token = JWT.sign(
         //iat: new Date().getTime()
-        user: payload
-    }, jwt.secret, { expiresIn: '1h' });
+       payload
+    , jwt.secret, { expiresIn: '1h' });
 
     return token;
 }

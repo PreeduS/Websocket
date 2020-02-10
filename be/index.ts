@@ -1,18 +1,14 @@
 import express from 'express';
 import WebSocket from 'ws';
-import mongoose from 'mongoose';
-import passport from 'passport';
-
-import setPassport from './auth/localStrategy/localStrategy';
-const setRoutes = require('./routes').default
-
-
+import bootstrap from './bootstrap';
+ 
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-setPassport()
-setRoutes(app)
+
+bootstrap(app)
+
 
 // ws
 const server = WebSocket.Server;
@@ -20,19 +16,8 @@ const wsServer = new server({
     port: 5001
 })
 
-
-// db
-
-mongoose.connect('mongodb://localhost:27017/app', {useNewUrlParser: true}).then( ()=>{
-    console.log('connected')
-}, err =>{
-    console.log('err: ',err)
-});
-
-
-
 // temp code
-
+/*
 const users = []
 
 app.get('/users/add', (req, res) => {
@@ -43,14 +28,14 @@ app.get('/users/add', (req, res) => {
     users.push(newUser)
 
     //wsServer.on('connection', (ws) => {
-        /*req.ws.send(JSON.stringify({
-            type: 'user',
-            data: newUser
-        }))*/
+        //req.ws.send(JSON.stringify({
+        //    type: 'user',
+        //    data: newUser
+        //}))
     //})
     res.send('Added')
 })
-
+*/
 
 
 wsServer.on('connection', (ws) => {
@@ -85,10 +70,6 @@ wsServer.on('connection', (ws) => {
 
 
 
-app.get('/', (req, res) => {
- 
-    res.send('Added2.....')
-})
-
-
 app.listen(port, () => console.log('Server started..'))
+
+

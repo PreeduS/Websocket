@@ -1,5 +1,6 @@
 be/node_modules
 be/build
+be/build-wp
 be/data
 fe/node_modules
 fe/app/node_modules

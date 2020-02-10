@@ -1,36 +1,109 @@
-const router = require('express').Router();
-import passport from 'passport'
 
-import signIn from '../controllers/signIn'
- 
-router.get('/test',  (req, res) =>  res.send('test') )
-router.get('/secret/local', passport.authenticate('local', {session: false}) , (req, res) =>  res.send('secret local') )
- 
+import express from 'express';
+import { Express } from 'express';
+import passport from 'passport';
 
-//  passport.authenticate('local', { failureRedirect: '/login' }),
+// controllers
+import signIn from 'app/controllers/signIn';
+import signUp from 'app/controllers/signUp';
+import users from 'app/controllers/users';
 
-
-//post
-router.get('/secret/jwt', passport.authenticate('jwt', {session: false}) , (req, res) =>  res.send('secret jwt') )
-
+// validations
+import signUpValidation from 'app/validations/signUp';
+import signInValidation from 'app/validations/signIn';
 
 
-    //post
-    router.get('/signIn', signIn);
+const groupRoute = (app: Express, path) => {
+    const router =  express.Router()
+    app.use(path,router );
+    return router;
+}
 
-    // {"token":
-    // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoidGVzdCJ9LCJpYXQiOjE1ODEwOTQ2OTIsImV4cCI6MTU4MTA5ODI5Mn0.SdKCnNQgw9iCnksf2UaywGQt3-MhBhd9N22unKqtlj0"
-    //}
 
-const setRoutes = (app) => {
-    app.get('/', (req, res) => { res.send('home'); });
+
+const setupRoutes = (app: Express) => {
+    app.get('/', (req, res) => { res.send('/') })
     
+    const authRoute = groupRoute(app, '/auth')
+        authRoute.post('/signIn', [signInValidation], signIn)
+        authRoute.post('/signUp', [signUpValidation], signUp)
+        authRoute.get('/test',  (req, res) =>  res.send('test') )
+        // authRoute.get('/secret/local', [passport.authenticate('local', {session: false})] , (req, res) =>  res.send('secret local') )
+        authRoute.get('/secret/jwt', [passport.authenticate('jwt', {session: false})] , (req, res) =>  res.send('secret jwt') )
 
- 
-    app.use('/auth',router );
+    //app.get('/users', [passport.authenticate('jwt', {session: false, successRedirect: '/users/self', failureRedirect: '/users/other'})], users)
+    app.get('/users', users)
+
+    //app.get('/user/:id', [passport.authenticate('jwt', {session: false, /*successRedirect: '/user/d/self', failureRedirect: '/user/d/other'*/})], 
+    //  app.get('/user/:username?', [passport.authenticate('jwt', {session: false, failureRedirect: '/user/other'})], 
+    
+    //app.get('/user/self',[passport.authenticate('jwt', {session: false})], (req, res) => {   console.log('req user self ',req.user);  res.send('/user/self ' + req.params.username) })
+    //app.get('/user/other', (req, res) => {   console.log('req user other',req.user); res.send('/user/other '+ req.params.id) })
+
+
+    app.get('/user', [passport.authenticate('jwt', {session: false})], (req, res) => {
+        
+        return res.send('user/self ' + req.user.username)
+    }) 
+
+    app.get('/user/profile/:username', 
+    (req, res) => {   
+        // wip
+        passport.authenticate('jwt', {session: false}, (err, user, info) => {
+
+            let isSelf = false
+            if(user){
+                    isSelf = user.username ===  req.params.username
+            }
+
+   
+            return res.send('/user, isSelf ' + isSelf + ' --- ' +  req.params.username) 
+            /*if(isSelf){
+               res.redirect('/user/self/')
+            }else{
+               res.redirect('/user/other/')
+            }*/
+
+
+
+
+        })(req, res);
+
+
+        
+    })
+
+
+
+    app.all('*', (req, res) => { res.send('/fallback') });
 }
 
 
 
 
-export default setRoutes
+export default setupRoutes;
+
+
+
+
+
+//const router = require('express').Router();
+
+//----
+//const setupRoutes = (app: Express) => {
+    //app.get('/', (req, res) => { res.send('home'); });
+
+    //app.use('/auth',router );
+
+//----
+
+//router.get('/test',  (req, res) =>  res.send('test') )
+//router.get('/secret/local', passport.authenticate('local', {session: false}) , (req, res) =>  res.send('secret local') )
+ 
+//router.get('/secret/jwt', passport.authenticate('jwt', {session: false}) , (req, res) =>  res.send('secret jwt') )
+
+//  passport.authenticate('local', { failureRedirect: '/login' }),
+
+
+    //router.post('/signIn', [signInValidation], signIn);
+    //router.post('/signUp', [signUpValidation], signUp);

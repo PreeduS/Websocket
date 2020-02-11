@@ -1,6 +1,41 @@
-<p>register works!</p>
 
 
-<app-input [(value)] = "inputValue"></app-input>
+ 
+<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+    <app-input 
+        type="text" 
+        name = "username" 
+        formControlName = "username" 
+        label = "Username:"
+        [error] = "getUsernameError()"
+    >
+    </app-input>
 
-inputValue: {{inputValue}}
+    <div formGroupName="passwordGroup">
+
+        <app-input 
+            type= "password" 
+            name = "password" 
+            formControlName = "password" 
+            label = "Password:"
+            [error] = "getPasswordError()"
+        >
+        </app-input>
+ 
+        <app-input 
+            type= "password"
+            name = "password2" 
+            formControlName = "password2" 
+            label = "Verify password:"
+            [error] = "getPasswordMatchError() ||  getPassword2Error()"
+        ></app-input>
+
+        
+    </div>
+
+    <br />
+    <input type="submit" value="Submit" />
+
+   
+</form>
+

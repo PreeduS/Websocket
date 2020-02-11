@@ -1,5 +1,16 @@
+.wrapper {
+    margin-bottom: 1rem;
+}
+.label {
+    margin-bottom: .5rem;
+}
 input {
     border:1px solid gray;
     height: 2rem;
+    outline: none;
 
+}
+.error{
+    margin-top: .25rem;
+    color: #cc0000;
 }

@@ -1,3 +1,17 @@
 
-<input type = "text" [(ngModel)] = "value" (ngModelChange) = "onChange($event)"/>
-
+<div class = "wrapper">
+    <div *ngIf = "label" class = "label">
+        {{label}}
+    </div>
+    <input 
+        [type] = "type" 
+        [(ngModel)] = "value" 
+        (ngModelChange) = "onChange($event)"
+        [ngStyle] = "getInputStyles()"
+        (focus) = "onTouched()"
+    
+    />
+    <div *ngIf = "error" class = "error">
+        {{error}}
+    </div>
+</div>

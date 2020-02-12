@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { HttpClient} from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map, catchError } from 'rxjs/operators';
 
+const ACCESS_TOKEN = 'ACCESS_TOKEN'
 
 
 interface User {
@@ -14,15 +15,20 @@ interface User {
 })
 export class UserService { 
     private user: Subject<User>;
+
     constructor(private http: HttpClient) { 
         this.user = new Subject<User>();
     }
 
-    private setToken = () => {
-        
+    // auth
+    setAccessToken = (accessToken) => {
+      localStorage.setItem(ACCESS_TOKEN, accessToken)
     }
-    private deleteToken = () => {
-
+    removeAccessToken = () => {
+        localStorage.removeItem(ACCESS_TOKEN)
+    }
+    getAccessToken = () => {
+        return localStorage.getItem(ACCESS_TOKEN)
     }
 
     getUser = () =>  this.user;
@@ -33,15 +39,19 @@ export class UserService {
     
     signUp = (username: string, password: string) => {
         //return this.http.post('auth/signUp',{
-        return this.http.post('auth/signUp',{
-            username,
-            password
+        return this.http.get('auth/secret/jwt',{
+           // username,
+           // password
 
-        }).pipe(map((x:any) => {
-            console.log('z ',x); 
-            const { token } = x;
-            //set token
-            return x;
-        }))
+        }).pipe(
+            map((x:any) => {
+                console.log('z ',x); 
+                const { accessToken } = x;
+                //set token
+                return x;
+            })
+            
+     
+        )
     }
 }

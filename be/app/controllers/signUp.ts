@@ -58,7 +58,7 @@ const signUp: RequestHandler <Params, any, ReqBody> = async (req, res, next) => 
 
 
     // send token
-    res.status(201).send({token})
+    res.status(201).send({accessToken:token})
 
 }
 

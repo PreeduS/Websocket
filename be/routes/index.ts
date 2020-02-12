@@ -22,14 +22,24 @@ const groupRoute = (app: Express, path) => {
 
 
 const setupRoutes = (app: Express) => {
-    app.get('/', (req, res) => { res.send('/') })
+    app.use('/', (req, res, next) => { 
+            console.log('path ',req.path)
+        next()
+    })
+    app.get('/', (req, res) => { 
+            console.log('path ',req.path)
+        res.send('/') 
+    })
     
     const authRoute = groupRoute(app, '/auth')
         authRoute.post('/signIn', [signInValidation], signIn)
         authRoute.post('/signUp', [signUpValidation], signUp)
         authRoute.get('/test',  (req, res) =>  res.send('test') )
         // authRoute.get('/secret/local', [passport.authenticate('local', {session: false})] , (req, res) =>  res.send('secret local') )
-        authRoute.get('/secret/jwt', [passport.authenticate('jwt', {session: false})] , (req, res) =>  res.send('secret jwt') )
+        authRoute.get('/secret/jwt', [passport.authenticate('jwt', {session: false})] , (req, res) => {
+             console.log('jwt')
+            return res.send('secret jwt')
+        })
 
     //app.get('/users', [passport.authenticate('jwt', {session: false, successRedirect: '/users/self', failureRedirect: '/users/other'})], users)
     app.get('/users', users)

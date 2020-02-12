@@ -5,7 +5,7 @@ import verifyPassword from '../auth/utils/verifyPassword';
 import { getGeneralError, type } from 'app/common/utls/getError';
 
 const signIn = async (req, res) => {
-
+    console.log('signIn')
     const {username, password} = req.body; 
     let userResult;
     try {
@@ -35,7 +35,7 @@ const signIn = async (req, res) => {
         const token = signToken({
             username
         });
-        return res.status(200).send({token})
+        return res.status(200).send({accessToken:token})
     }else{
         return res.status(400).send(getGeneralError({message:'Wrong username or password'}))
     }

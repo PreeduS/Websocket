@@ -2,7 +2,8 @@ import bcrypt from 'bcrypt';
 import { RequestHandler, Params } from 'app/common/types/express';
 import { getGeneralError, type } from 'app/common/utls/getError';
 import User from '../../app/mongoose/schema/user';
-import signToken from '../auth/utils/signToken';
+import signToken from '../auth/utils/token/signToken';
+import { signAccessToken, signRefreshToken } from '../auth/utils/token/userTokens';
 
 export type ReqBody = {
     username: string
@@ -10,7 +11,7 @@ export type ReqBody = {
     email: string
 }
 
-const signUp: RequestHandler <Params, any, ReqBody> = async (req, res, next) => {
+const signUp: RequestHandler <Params, any, ReqBody> = async (req, res) => {
 
     const {username, password, email} = req.body;
     let userResult;
@@ -52,13 +53,16 @@ const signUp: RequestHandler <Params, any, ReqBody> = async (req, res, next) => 
     console.log('userResult ',userResult )
 
     // sign token
-    const token = signToken({
+    const accessToken = signAccessToken({
+        username: userResult.username,
+    },{expiresIn: '15s'});
+    const refreshToken = signRefreshToken({
         username: userResult.username,
     });
 
 
     // send token
-    res.status(201).send({accessToken:token})
+    res.status(201).send({accessToken, refreshToken})
 
 }
 

@@ -1,5 +1,6 @@
 
-import signToken from '../auth/utils/signToken';
+import signToken from '../auth/utils/token/signToken';
+import { signAccessToken, signRefreshToken } from '../auth/utils/token/userTokens';
 import User from '../../app/mongoose/schema/user';
 import verifyPassword from '../auth/utils/verifyPassword';
 import { getGeneralError, type } from 'app/common/utls/getError';
@@ -32,10 +33,15 @@ const signIn = async (req, res) => {
  
 
     if(passwordMatch){
-        const token = signToken({
+
+        const accessToken = signAccessToken({
+            username,
+        },{expiresIn: '15s'});
+        const refreshToken = signRefreshToken({
             username
         });
-        return res.status(200).send({accessToken:token})
+
+        return res.status(200).send({accessToken, refreshToken})
     }else{
         return res.status(400).send(getGeneralError({message:'Wrong username or password'}))
     }

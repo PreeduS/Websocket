@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
+import jwtDecode from 'jwt-decode'
+import { UserJwtPayload, User } from 'src/app/commons/types/user';
 
-const ACCESS_TOKEN = 'ACCESS_TOKEN'
+const ACCESS_TOKEN = 'ACCESS_TOKEN';
+const REFRESH_TOKEN = 'REFRESH_TOKEN';
 
-
-interface User {
-    username: string
-}
+ 
 
 @Injectable({
     providedIn: 'root',
@@ -21,6 +21,7 @@ export class UserService {
     }
 
     // auth
+    // access token
     setAccessToken = (accessToken) => {
       localStorage.setItem(ACCESS_TOKEN, accessToken)
     }
@@ -31,10 +32,66 @@ export class UserService {
         return localStorage.getItem(ACCESS_TOKEN)
     }
 
+    // refresh token
+    setRefreshToken = (refreshToken) => {
+        localStorage.setItem(REFRESH_TOKEN, refreshToken)
+      }
+    removeRefreshToken = () => {
+        localStorage.removeItem(REFRESH_TOKEN)
+    }
+    getRefreshToken = () => {
+        return localStorage.getItem(REFRESH_TOKEN)
+    }
+
     getUser = () =>  this.user;
 
-    signIn = (username: string, password: string) => {
+    private getDecodedUser: (accessToken:string) => UserJwtPayload = (accessToken) => jwtDecode(accessToken)
+   
+    initUser = () => {  
 
+        const accessToken = this.getAccessToken();
+        const refreshToken = this.getRefreshToken();
+        if(accessToken && refreshToken)(
+            this.http.post('auth/tokenSignIn',{
+                accessToken, refreshToken
+            }).subscribe((response:any) => {
+                console.log(response)
+                const { valid, accessToken } = response;
+                if(valid){
+                    const decoded = this.getDecodedUser(accessToken);
+                    console.log('decoded ',decoded)
+                    this.setAccessToken(accessToken)
+                    this.user.next({username: decoded.user.username})
+                }
+            })
+        )
+        
+  
+  
+    }
+    signIn = (username: string, password: string) => {
+        return this.http.post('auth/signIn',{
+            username, password
+        }).pipe(
+            map((response:any) => {
+    
+                const { accessToken, refreshToken } = response;
+                if(accessToken && refreshToken){
+                    try{
+                        const decoded = this.getDecodedUser(accessToken);
+                        this.setAccessToken(accessToken);
+                        this.setRefreshToken(refreshToken);
+                        this.user.next({username: decoded.user.username})
+                    }catch(error){
+                        console.log('e ',error)
+                    }
+
+                }else{
+                    return throwError('Access Token not returned')
+                }   
+                return response;
+            })
+        )
     }
     
     signUp = (username: string, password: string) => {

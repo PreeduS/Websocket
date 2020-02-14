@@ -13,6 +13,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { HeaderComponent } from './commons/components/structure/header/header.component';
 import { InputComponent } from './commons/components/input/input.component';
+import { SignInComponent } from './pages/sign-in/sign-in.component';
+ 
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { InputComponent } from './commons/components/input/input.component';
     HomeComponent,
     RegisterComponent,
     HeaderComponent,
-    InputComponent
+    InputComponent,
+    SignInComponent, 
   ],
   imports: [
     BrowserModule,

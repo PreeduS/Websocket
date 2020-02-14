@@ -5,8 +5,10 @@ import passport from 'passport';
 
 // controllers
 import signIn from 'app/controllers/signIn';
+import tokenSignIn from 'app/controllers/tokenSignIn';
 import signUp from 'app/controllers/signUp';
 import users from 'app/controllers/users';
+import getAccessToken from 'app/controllers/getAccessToken';
 
 // validations
 import signUpValidation from 'app/validations/signUp';
@@ -33,12 +35,14 @@ const setupRoutes = (app: Express) => {
     
     const authRoute = groupRoute(app, '/auth')
         authRoute.post('/signIn', [signInValidation], signIn)
+        authRoute.post('/tokenSignIn', tokenSignIn)
         authRoute.post('/signUp', [signUpValidation], signUp)
         authRoute.get('/test',  (req, res) =>  res.send('test') )
+        authRoute.post('/getAccessToken',  getAccessToken )
         // authRoute.get('/secret/local', [passport.authenticate('local', {session: false})] , (req, res) =>  res.send('secret local') )
         authRoute.get('/secret/jwt', [passport.authenticate('jwt', {session: false})] , (req, res) => {
              console.log('jwt')
-            return res.send('secret jwt')
+            return res.send({result:'secret jwt'})
         })
 
     //app.get('/users', [passport.authenticate('jwt', {session: false, successRedirect: '/users/self', failureRedirect: '/users/other'})], users)

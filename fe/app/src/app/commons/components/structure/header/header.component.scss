@@ -1,17 +1,43 @@
 .header{
-    display: flex;;
+    display: flex;
     border-bottom: 1px solid gray;
     height: 3rem;
     background: #2f3640;
+
+    .content {
+        display: flex;
+        flex: 1;
+        margin: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+.navigation{
+    display: flex;
+    flex: 1;
+
+    a.item{
+        display: flex;
+        margin: 0 1rem;
+        color: white;
+        text-decoration: none;
+        outline: none;
+        > span{
+            margin: auto;
+        }
+        &:first-of-type{
+            margin-left: 0;
+        }
+    }
+
 }
 
-a.item{
+.user {
     display: flex;
-    margin: 0 1rem;
-    color: white;
-    text-decoration: none;
-    outline: none;
-    > span{
-        margin: auto;
+
+    .username{
+        display: flex;
+        margin: auto 0;
+        color: white;
     }
 }

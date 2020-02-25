@@ -1,0 +1,22 @@
+
+<button *ngIf = "false" (click) = "sendUser()">Send user</button>
+
+
+<chat-header [chatAuthenticated] = "chatAuthenticated" [username] = "username"></chat-header>
+
+
+<div class = "chat-wrapper">
+    <div class = "body-wrapper">
+        <chat-body [comments] = "comments" [users] = "users"></chat-body>
+    </div>
+    <div class = "users-wrapper" *ngIf = "false">
+        <div *ngFor = "let user of users" class = "user">
+            {{user.name}}
+        </div>
+    </div>
+</div>
+chatAuthenticated = {{chatAuthenticated}}
+username = {{username}}
+
+
+<chat-footer (commentChange) = "addComment($event)" [chatAuthenticated] = "chatAuthenticated" [username] = "username"></chat-footer>

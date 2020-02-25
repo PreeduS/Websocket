@@ -1,25 +1,22 @@
 
-import express from 'express';
+// import express from 'express';
 import { Express } from 'express';
 import passport from 'passport';
+import groupRoute from './groupRoute';
 
 // controllers
 import signIn from 'app/controllers/signIn';
 import tokenSignIn from 'app/controllers/tokenSignIn';
 import signUp from 'app/controllers/signUp';
-import users from 'app/controllers/users';
+import Users from 'app/controllers/users';
+import User from 'app/controllers/user';
 import getAccessToken from 'app/controllers/getAccessToken';
 
 // validations
 import signUpValidation from 'app/validations/signUp';
 import signInValidation from 'app/validations/signIn';
-
-
-const groupRoute = (app: Express, path) => {
-    const router =  express.Router()
-    app.use(path,router );
-    return router;
-}
+import getAccessTokenValidation from 'app/validations/getAccessToken';
+import tokenSignInValidation from 'app/validations/tokenSignIn';
 
 
 
@@ -35,10 +32,10 @@ const setupRoutes = (app: Express) => {
     
     const authRoute = groupRoute(app, '/auth')
         authRoute.post('/signIn', [signInValidation], signIn)
-        authRoute.post('/tokenSignIn', tokenSignIn)
+        authRoute.post('/tokenSignIn', [tokenSignInValidation], tokenSignIn)
         authRoute.post('/signUp', [signUpValidation], signUp)
         authRoute.get('/test',  (req, res) =>  res.send('test') )
-        authRoute.post('/getAccessToken',  getAccessToken )
+        authRoute.post('/getAccessToken',[getAccessTokenValidation],  getAccessToken )
         // authRoute.get('/secret/local', [passport.authenticate('local', {session: false})] , (req, res) =>  res.send('secret local') )
         authRoute.get('/secret/jwt', [passport.authenticate('jwt', {session: false})] , (req, res) => {
              console.log('jwt')
@@ -46,7 +43,7 @@ const setupRoutes = (app: Express) => {
         })
 
     //app.get('/users', [passport.authenticate('jwt', {session: false, successRedirect: '/users/self', failureRedirect: '/users/other'})], users)
-    app.get('/users', users)
+    app.get('/users', Users.find)
 
     //app.get('/user/:id', [passport.authenticate('jwt', {session: false, /*successRedirect: '/user/d/self', failureRedirect: '/user/d/other'*/})], 
     //  app.get('/user/:username?', [passport.authenticate('jwt', {session: false, failureRedirect: '/user/other'})], 
@@ -55,39 +52,13 @@ const setupRoutes = (app: Express) => {
     //app.get('/user/other', (req, res) => {   console.log('req user other',req.user); res.send('/user/other '+ req.params.id) })
 
 
-    app.get('/user', [passport.authenticate('jwt', {session: false})], (req, res) => {
+
+    /*app.get('/user', [passport.authenticate('jwt', {session: false})], (req, res) => {
         
         return res.send('user/self ' + req.user.username)
-    }) 
+    }) */
 
-    app.get('/user/profile/:username', 
-    (req, res) => {   
-        // wip
-        passport.authenticate('jwt', {session: false}, (err, user, info) => {
-
-            let isSelf = false
-            if(user){
-                    isSelf = user.username ===  req.params.username
-            }
-
-   
-            return res.send('/user, isSelf ' + isSelf + ' --- ' +  req.params.username) 
-            /*if(isSelf){
-               res.redirect('/user/self/')
-            }else{
-               res.redirect('/user/other/')
-            }*/
-
-
-
-
-        })(req, res);
-
-
-        
-    })
-
-
+    app.get('/user/profile/:username?', User.profile)
 
     app.all('*', (req, res) => { res.send('/fallback') });
 }

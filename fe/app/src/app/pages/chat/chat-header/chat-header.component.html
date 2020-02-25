@@ -1,0 +1,16 @@
+
+<div class = "header-wrapper">
+    <div *ngIf = "chatAuthenticated && username">
+        <div>{{username}}</div>
+    
+    </div>
+    <div *ngIf = "!username || !chatAuthenticated" class = "signed-out-content">
+        <div>Not Signed In</div> <button (click) = "signIn()">Sign In</button>
+        
+    </div>
+    <div *ngIf = "username && !chatAuthenticated">
+        <div>Authentication error</div>
+        
+    </div>
+
+</div>

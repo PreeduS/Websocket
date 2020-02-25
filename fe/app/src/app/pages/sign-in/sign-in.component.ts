@@ -28,9 +28,9 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.signInForm)
+    // todo add redirect
     const { valid } = this.signInForm
-    console.log(this.signInForm)
+ 
     const { username, password } = this.signInForm.value;
  
     this.userService.signIn(username, password).subscribe(

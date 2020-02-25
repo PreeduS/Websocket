@@ -1,5 +1,5 @@
 
-<app-header [username] = "username"></app-header>
+<app-header [username] = "username" (signOutChange) = "signOut()"></app-header>
 
 <div class = "app-content">
     <router-outlet></router-outlet>

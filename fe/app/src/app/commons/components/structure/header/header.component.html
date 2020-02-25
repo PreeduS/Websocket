@@ -3,22 +3,25 @@
         <div class = "navigation">
             <a class = "item" [routerLink] = "['/']">
                 <span>
-                    home
+                    chat
                 </span>
             </a> 
-            <a class = "item" [routerLink] = "['/register']">
+            <a *ngIf = "!username" class = "item" [routerLink] = "['/register']">
                 <span>
                     register
                 </span>
             </a> 
-            <a class = "item" [routerLink] = "['/signin']">
+            <a *ngIf = "!username" class = "item" [routerLink] = "['/signin']">
                 <span>
                     signin
                 </span>
             </a>         
         </div>
 
-        <div class = "user">
+        <div *ngIf = "username" class = "user">
+            <div class="signout" (click) = "signOut()">
+                sign out
+            </div>
             <div class="username">
                 {{username}}
             </div>

@@ -1,12 +1,12 @@
 
  
-import {  verifyAccessToken, verifyRefreshToken, signAccessToken } from '../auth/utils/token/userTokens';
+import { verifyRefreshToken, signAccessToken } from '../auth/utils/token/userTokens';
 import { UserJwtPayload } from 'app/common/types/user';
 
 // rename todo verifyAccessToken
 const tokenSignIn = async (req, res) => {
     console.log('tokenSignIn')
-    const { accessToken, refreshToken } = req.body; 
+    const { refreshToken } = req.body; 
 
     try {
         const refreshTokenResult:UserJwtPayload = verifyRefreshToken(refreshToken) as UserJwtPayload;

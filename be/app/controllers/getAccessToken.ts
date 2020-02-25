@@ -3,7 +3,7 @@ import { UserJwtPayload } from 'app/common/types/user';
 
 
 const getAccessToken = (req, res) => {
-    const {  refreshToken } = req.body;
+    const { refreshToken } = req.body;
     let refreshTokenPayload: UserJwtPayload;
     try{
         refreshTokenPayload = verifyRefreshToken(refreshToken) as UserJwtPayload;

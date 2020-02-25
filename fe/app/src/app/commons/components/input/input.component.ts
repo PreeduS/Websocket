@@ -11,6 +11,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input() type: String = 'text'; 
   @Input() label?: String; 
   @Input() error?: String; 
+  @Input() disabled?: boolean = false; 
   @Output() valueChange = new EventEmitter<string>();
 
   @Input() width: String = '10rem'

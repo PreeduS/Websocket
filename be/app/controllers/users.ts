@@ -1,25 +1,25 @@
 import User from '../mongoose/schema/user';
 import { getGeneralError, type } from 'app/common/utls/getError';
+import UsersService from 'app/services/users';
 
 
-const users = async (req, res) => {
-    let userResult;
+class Users {
+
+    find = async(req, res) =>{
+        let userResult;
   
-    console.log(' usersreq ',req.user)
-    try {    
-        userResult = await User
-        .find()
-        .select({username: 1})
-        // .skip(2)
-        // .limit(5)
-    }catch(error){
-        return res.status(500).send(getGeneralError({type: type.InternalServerError}))
+        try {    
+            userResult = await UsersService.find({limit: 10})
+        }catch(error){
+            return res.status(500).send(getGeneralError({type: type.InternalServerError}))
+        }
+    
+    
+        res.send({userResult});
     }
-
-
-    res.send({userResult});
 }
 
-export default users;
+
+export default new Users();
 
 

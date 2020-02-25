@@ -1,6 +1,6 @@
 
-import * as yup from 'yup'
-import validateBody from '../../app/common/validation/validateBody';
+import * as yup from 'yup';
+import validateBody from 'app/common/validation/validateBody';
 
 
 const schema = (

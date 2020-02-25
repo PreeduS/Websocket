@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject, throwError } from 'rxjs';
+import { throwError, ReplaySubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 import jwtDecode from 'jwt-decode'
 import { UserJwtPayload, User } from 'src/app/commons/types/user';
 
@@ -14,13 +14,16 @@ const REFRESH_TOKEN = 'REFRESH_TOKEN';
     providedIn: 'root',
 })
 export class UserService { 
-    private user: Subject<User>;
+
+    private user: ReplaySubject<User>;
+
+    private getDecodedUser: (accessToken:string) => UserJwtPayload = (accessToken) => jwtDecode(accessToken)
 
     constructor(private http: HttpClient) { 
-        this.user = new Subject<User>();
+        this.user = new ReplaySubject<User>(1);
     }
 
-    // auth
+
     // access token
     setAccessToken = (accessToken) => {
       localStorage.setItem(ACCESS_TOKEN, accessToken)
@@ -45,13 +48,16 @@ export class UserService {
 
     getUser = () =>  this.user;
 
-    private getDecodedUser: (accessToken:string) => UserJwtPayload = (accessToken) => jwtDecode(accessToken)
+    isSignedIn = () =>
+        this.getUser().pipe(map(user => !!user.username))
+    
+
    
     initUser = () => {  
-
         const accessToken = this.getAccessToken();
         const refreshToken = this.getRefreshToken();
-        if(accessToken && refreshToken)(
+        if(accessToken && refreshToken){
+
             this.http.post('auth/tokenSignIn',{
                 accessToken, refreshToken
             }).subscribe((response:any) => {
@@ -59,14 +65,20 @@ export class UserService {
                 const { valid, accessToken } = response;
                 if(valid){
                     const decoded = this.getDecodedUser(accessToken);
-                    console.log('decoded ',decoded)
+  
                     this.setAccessToken(accessToken)
                     this.user.next({username: decoded.user.username})
+                }else{
+                    this.user.next({username: null})
                 }
+            },() => {
+                this.user.next({username: null})
             })
-        )
+        }else{
+            this.user.next({username: null})
+        }
         
-  
+        // first emit always used for signIn canActivate route  
   
     }
     signIn = (username: string, password: string) => {
@@ -94,11 +106,17 @@ export class UserService {
         )
     }
     
+    signOut(){
+        this.removeRefreshToken();
+        this.removeAccessToken();
+        this.user.next({username: null})
+    }
+
     signUp = (username: string, password: string) => {
-        //return this.http.post('auth/signUp',{
-        return this.http.get('auth/secret/jwt',{
-           // username,
-           // password
+        return this.http.post('auth/signUp',{
+        //return this.http.get('auth/secret/jwt',{
+            username,
+            password
 
         }).pipe(
             map((x:any) => {
@@ -111,4 +129,35 @@ export class UserService {
      
         )
     }
+
+
+    // canActivate routes
+    canActivateSignIn(){
+        return this.getUser()
+        .pipe(
+            first(),
+            map( user => {
+                if (!user.username){
+                    return true;
+                }else{
+                    return false;
+                }
+            })
+        )
+    }
+    /*canActivateSignOut(){
+        return this.getUser()
+        .pipe(
+            // last ?
+            map( user => {
+                console.log('canActivateSignOut ', user)
+                if (user.username){
+                    return true;
+                }else{
+                    return false;
+                }
+            })
+        )    
+    }*/
+
 }

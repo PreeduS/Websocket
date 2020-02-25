@@ -3,16 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SignInGuardService } from 'src/app/services/sign-in-guard.service';
 
-import { HomeComponent } from 'src/app/pages/home/home.component';
+import { ChatComponent } from 'src/app/pages/chat/chat.component';
 import { RegisterComponent } from 'src/app/pages/register/register.component';
 import { SignInComponent } from 'src/app/pages/sign-in/sign-in.component';
 
-
+// SignOutGuardService
 const appRoutes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'register', component: RegisterComponent },
-  //  { path: 'signin', canActivate: [SignInGuardService], component: SignInComponent },
-    { path: 'signin', component: SignInComponent },
+    { path: '', component: ChatComponent },
+    { path: 'register', canActivate: [SignInGuardService], component: RegisterComponent },
+    { path: 'signin', canActivate: [SignInGuardService], component: SignInComponent },
+   // { path: 'signin', component: SignInComponent },
 
 ]
 

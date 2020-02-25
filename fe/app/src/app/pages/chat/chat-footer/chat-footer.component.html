@@ -1,0 +1,11 @@
+
+
+<app-input 
+    type="text" 
+    [(value)] = "commentValue"
+    label = "Comment:"
+    [disabled] = "!this.chatAuthenticated"
+
+></app-input>
+
+<button (click)="addComment()" [disabled] = "!this.chatAuthenticated">add</button>

@@ -1,0 +1,74 @@
+:host{
+    display: flex;
+    flex:1;
+    //border: 1px solid rgb(230, 230, 230);
+    min-height: 60vh;
+    max-height: calc(100vh - 20rem);
+}
+
+.chat-wrapper{
+    display: flex;
+    flex:1;
+    flex-direction: column;
+
+    //background: rgb(240, 240, 240); 
+    border: 1px solid rgb(230, 230, 230);
+
+    .comments-wrapper {
+        flex: 1;
+        padding: .5rem;
+        overflow-y: auto;
+    
+    }
+    .add-comment-wrapper{
+        display: flex;
+        height: 4rem;
+        border-top: 1px solid rgb(230, 230, 230);
+    
+    }
+    
+    
+
+
+}
+
+.users-wrapper{
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 14rem;
+    padding: .5rem;
+    border: 1px solid rgb(230, 230, 230);
+    margin-left: 1rem;
+    overflow-y: auto;
+    //background: rgb(235, 235, 235); 
+    //background: rgb(240, 240, 240); 
+    .wrapper{
+        display: flex;
+        width: 100%;
+        margin-bottom: .5rem;
+
+        .content-left {
+            .logo{
+                border: 1px solid rgb(200, 200, 200);
+                width: 1.25rem;
+                height: 1.25rem;
+
+            }
+        }
+    
+        .content-right {
+            display: flex;
+            flex: 1;
+            margin-left: .5rem;
+            .username{
+                margin: auto 0;
+                
+            }
+    
+    
+            
+        }
+    }    
+
+
+}

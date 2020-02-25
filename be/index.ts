@@ -1,75 +1,22 @@
 import express from 'express';
-import WebSocket from 'ws';
 import bootstrap from './bootstrap';
- 
+import wsServer from './chat/index';
 
+//const http = require('http');
+//const hserver = http.createServer();
 const app = express();
 const port = process.env.PORT || 5000;
 
 
 bootstrap(app)
 
+const httpServer = app.listen(port, () => console.log('Server started..'))
+//const httpServer = hserver.listen(port, () => console.log('Server started..'))
+httpServer.on('upgrade',((request, socket, head)=>{
+        //console.log('upgrade', request)
 
-// ws
-const server = WebSocket.Server;
-const wsServer = new server({
-    port: 5001
-})
-
-// temp code
-/*
-const users = []
-
-app.get('/users/add', (req, res) => {
-    const newUser = {
-        id: users.length,
-        name: `placeholder ${users.length}`       
-    }
-    users.push(newUser)
-
-    //wsServer.on('connection', (ws) => {
-        //req.ws.send(JSON.stringify({
-        //    type: 'user',
-        //    data: newUser
-        //}))
-    //})
-    res.send('Added')
-})
-*/
-
-
-wsServer.on('connection', (ws) => {
-    //ws.id = Math.random();  // or token
-    //console.log('connection ',ws.message)
-    ws.on('message', (message: string) => {
-        // console.log('message: ',message)
-
-        //ws.send('self: '+ message)
-        const { data, type } = JSON.parse(message)
-
-        if(type === 'add_user'){
-            console.log('add user ',data)
-        }else{
-            wsServer.clients.forEach(client => {
-                //    console.log('client ',client)
-         
-                    if (client.readyState === WebSocket.OPEN) {
-                        client.send(JSON.stringify({
-                            type,//: 'comment',
-                            data//: message
-                      
-                        }));
-                    }
-            })
-        }
-            
-
-
-    })
-})
-
-
-
-app.listen(port, () => console.log('Server started..'))
-
+        wsServer.handleUpgrade(request, socket, head, function done(ws) {
+            wsServer.emit('connection', ws, request, );
+          });
+}))
 

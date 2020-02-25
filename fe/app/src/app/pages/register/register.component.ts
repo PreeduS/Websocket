@@ -135,7 +135,7 @@ export class RegisterComponent implements OnInit {
 
 
   onSubmit(){
-    console.log(this.signUpForm)
+    // todo add redirect
     const { valid } = this.signUpForm
     this.isSubmitted = true;
     this.userService.signUp('testuser3','12345678').subscribe(

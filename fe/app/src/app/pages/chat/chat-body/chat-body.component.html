@@ -1,0 +1,29 @@
+<div class = "chat-wrapper">
+    <div class="comments-wrapper" #commentsWrapper>
+
+        <chat-comment *ngFor = "let comment of comments" [comment] = "comment" >
+ 
+        </chat-comment>
+    </div>
+
+    <div class = "add-comment-wrapper">
+
+    </div>
+</div>
+
+<div class = "users-wrapper">
+    <div *ngFor = "let user of users" class = "user">
+        <div class="wrapper">
+            <div class="content-left">
+                <div class="logo"></div>
+            </div>
+            
+            <div class="content-right">
+                <div class="username">{{user.name}}</div>
+            </div>
+        </div>
+    </div>
+
+
+    
+</div>

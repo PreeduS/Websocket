@@ -9,6 +9,7 @@
         (ngModelChange) = "onChange($event)"
         [ngStyle] = "getInputStyles()"
         (focus) = "onTouched()"
+        [disabled] = "disabled"
     
     />
     <div *ngIf = "error" class = "error">

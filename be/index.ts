@@ -1,7 +1,11 @@
+const result = require('dotenv').config()
 import express from 'express';
 import bootstrap from './bootstrap';
 import wsServer from './chat/index';
 
+if (result.error) {
+    throw result.error
+}
 //const http = require('http');
 //const hserver = http.createServer();
 const app = express();

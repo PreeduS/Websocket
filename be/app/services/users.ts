@@ -11,9 +11,9 @@ class Users {
     find = ({skip = findDefaultArgs.skip, limit = findDefaultArgs.limit }:FindArgs = findDefaultArgs) => {
         return User
         .find()
-        .select({username: 1})
-        .skip(skip)
-        .limit(limit)
+        //.select({username: 1})
+        //.skip(skip)
+        //.limit(limit)
     }
 }
 

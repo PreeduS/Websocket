@@ -6,7 +6,7 @@ import verifyPassword from '../auth/utils/verifyPassword';
 import { getGeneralError, type } from 'app/common/utls/getError';
 
 const signIn = async (req, res) => {
-    console.log('signIn')
+
     const {username, password} = req.body; 
     let userResult;
     try {

@@ -2,5 +2,7 @@ be/node_modules
 be/build
 be/build-wp
 be/data
+be/.env
+be/app/static/private/
 fe/node_modules
 fe/app/node_modules

@@ -1,9 +1,9 @@
 import * as JWT from 'jsonwebtoken'
-
+/*
 const jwt = {
     secret: 'secret'
 }
-
+*/
  
 type Options = {
     expiresIn: string

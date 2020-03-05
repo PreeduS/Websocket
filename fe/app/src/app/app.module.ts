@@ -18,6 +18,8 @@ import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { ChatFooterComponent } from './pages/chat/chat-footer/chat-footer.component';
 import { ChatBodyComponent } from './pages/chat/chat-body/chat-body.component';
 import { ChatCommentComponent } from './pages/chat/chat-body/chat-comment/chat-comment.component';
+import { ResetPasswordComponent } from './pages/user/callback/reset-password/reset-password.component';
+
  
 
 @NgModule({
@@ -32,6 +34,8 @@ import { ChatCommentComponent } from './pages/chat/chat-body/chat-comment/chat-c
     ChatFooterComponent,
     ChatBodyComponent,
     ChatCommentComponent,
+    ResetPasswordComponent,
+
   ],
   imports: [
     BrowserModule,

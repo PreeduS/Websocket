@@ -11,14 +11,14 @@ import signUp from 'app/controllers/signUp';
 import Users from 'app/controllers/users';
 import User from 'app/controllers/user';
 import getAccessToken from 'app/controllers/getAccessToken';
+import Auth from 'app/controllers/Auth';
+import Dev from 'app/controllers/dev';
 
 // validations
 import signUpValidation from 'app/validations/signUp';
 import signInValidation from 'app/validations/signIn';
 import getAccessTokenValidation from 'app/validations/getAccessToken';
 import tokenSignInValidation from 'app/validations/tokenSignIn';
-
-
 
 const setupRoutes = (app: Express) => {
     app.use('/', (req, res, next) => { 
@@ -30,11 +30,22 @@ const setupRoutes = (app: Express) => {
         res.send('/') 
     })
     
+    //app.get('/oauth/callback/gmail/',Auth.gmailCallback)
+   // app.get('/dev/sendPasswordResetMail/',Dev.sendPasswordResetMail)
+    
+    /*(req, res) => { 
+            console.log('path ',req.path)
+        res.send('/oauth/callback/gmail/') 
+    })*/
+    const oauthRoute = groupRoute(app, '/oauth');
+        oauthRoute.get('/callback/gmail/',Auth.gmailCallback);
+        oauthRoute.get('/gmail', Auth.gmail);
+    
     const authRoute = groupRoute(app, '/auth')
         authRoute.post('/signIn', [signInValidation], signIn)
         authRoute.post('/tokenSignIn', [tokenSignInValidation], tokenSignIn)
         authRoute.post('/signUp', [signUpValidation], signUp)
-        authRoute.get('/test',  (req, res) =>  res.send('test') )
+        //authRoute.get('/gmail',  Auth.gmail )
         authRoute.post('/getAccessToken',[getAccessTokenValidation],  getAccessToken )
         // authRoute.get('/secret/local', [passport.authenticate('local', {session: false})] , (req, res) =>  res.send('secret local') )
         authRoute.get('/secret/jwt', [passport.authenticate('jwt', {session: false})] , (req, res) => {
@@ -59,6 +70,13 @@ const setupRoutes = (app: Express) => {
     }) */
 
     app.get('/user/profile/:username?', User.profile)
+    app.post('/user/sendResetPasswordToken', User.sendResetPasswordToken)            // sendPasswordResetMail
+    app.post('/user/resetPassword/:token', User.resetPassword)              //callback
+    app.get('/test', (req, res) => {
+     
+        res.send('testt')
+        
+    })
 
     app.all('*', (req, res) => { res.send('/fallback') });
 }

@@ -4,7 +4,7 @@ import cors from 'cors';
 import setupMongoose from './app/mongoose/setupMongoose';
 import setupPassport from './app/auth/localStrategy/localStrategy';
 import setupRoutes from './routes/'
-
+import GmailAuth from 'app/external/gmail/auth';
 
 const setupMiddleware = (app: Express) => {
     app.use('/',bodyParser.json());
@@ -16,4 +16,7 @@ export default (app: Express) => {
     setupMongoose();
     setupRoutes(app)
     setupPassport()
+    //GmailAuth.init()
+
+
 }

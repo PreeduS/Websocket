@@ -160,4 +160,10 @@ export class UserService {
         )    
     }*/
 
+    resetPassword({token, username, password}){
+        return this.http.post(`user/resetPassword/${token}`,{
+            username, password
+        })
+    }
+
 }

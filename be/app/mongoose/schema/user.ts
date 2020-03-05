@@ -1,10 +1,11 @@
-import mongoose, { Document  } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 
 const userSchema = new mongoose.Schema({
-    username: {type: String, required: true },
+    username: {type: String, required: true, unique: true },
     password: {type: String, required: true },
-    email: {type: String, required: false },
+    email: {type: String, required: true, unique: true },
+    resetPasswordToken: {type: String, required: false },
     salt: String,       // not needed
     logo: String,
 });

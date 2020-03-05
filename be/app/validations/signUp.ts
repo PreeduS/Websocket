@@ -24,6 +24,7 @@ const schema = (
     yup.object().shape({
         username: yup.string().min(6).max(40).required(),
         password: yup.string().min(8).max(100).required('message password'),
+        email: yup.string().min(8).max(100).required(),
     }).required()
 )
 

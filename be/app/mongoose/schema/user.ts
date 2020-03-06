@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema({
     resetPasswordToken: {type: String, required: false },
     salt: String,       // not needed
     logo: String,
+
+    /*comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "comment"
+    }]*/
 });
 
 

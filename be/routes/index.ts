@@ -70,6 +70,7 @@ const setupRoutes = (app: Express) => {
     }) */
 
     app.get('/user/profile/:username?', User.profile)
+    app.post('/user/imageUpload', User.imageUpload)            // sendPasswordResetMail
     app.post('/user/sendResetPasswordToken', User.sendResetPasswordToken)            // sendPasswordResetMail
     app.post('/user/resetPassword/:token', User.resetPassword)              //callback
     app.get('/test', (req, res) => {

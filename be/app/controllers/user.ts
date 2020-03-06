@@ -1,6 +1,7 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
+import path from 'path';
 import userService from 'app/services/user';
 import UserSchema from 'app/mongoose/schema/user';
 import { getGeneralError, type } from 'app/common/utls/getError';
@@ -128,7 +129,34 @@ class User {
 
     // profile/settings
     imageUpload = async (req, res) => {
-        const base64Upload = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA';      
+
+
+        /*
+            # offset 0
+            .jpg/.jpeg
+                FF D8 FF DB
+                FF D8 FF E0
+                FF D8 FF EE
+                FF D8 FF E1
+            # end with      FF D9
+
+            .png	    89 50 4e 47
+            # end with      49 45 4E 44 AE 42 60 82
+        */
+
+
+        /*
+        
+            var buf = new Buffer(data, 'base64');
+
+            buf.slice(0,4)
+            fs.writeFile('image.png', buf);
+
+            buf.toString('hex')
+            // parseInt("10101001", 2).toString(16).toUpperCase()
+        */
+
+        const base64Upload = req.body.image;//'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA';      
         const splitBy = ';base64,';
         const splitByExists = base64Upload.includes(splitBy);
 
@@ -139,14 +167,20 @@ class User {
             
             if(mimeType && base64Image){
                 const fileName = `image_${Date.now()}_${Math.random()*100}.png`;
-                fs.writeFile(fileName, base64Image, {encoding: 'base64'}, function(err) {
+                const file = path.resolve('./app/static/private/'+fileName) ;
+                fs.writeFile(file, base64Image, {encoding: 'base64'}, function(err) {           // encoding: 'binary'
                     if(err){
+                        console.log(err)
                         return res.send('File upload error')
                     }
                     return res.send('File created: ' + fileName)
                 
                 });
+            }else{
+                return res.send('err')
             }
+        }else{
+            return res.send('err2')
         }
     }
 

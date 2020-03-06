@@ -160,9 +160,16 @@ export class UserService {
         )    
     }*/
 
+    // settings
     resetPassword({token, username, password}){
         return this.http.post(`user/resetPassword/${token}`,{
             username, password
+        })
+    }
+
+    imageUpload(base64Image){
+        return this.http.post(`user/imageUpload/`,{
+            image: base64Image
         })
     }
 

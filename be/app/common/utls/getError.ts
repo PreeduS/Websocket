@@ -59,23 +59,24 @@ type ValidationError = {
 */
 type GetGeneralError = (params?: GeneralErrorParams) => GeneralError | ValidationError
 
+// getError ?
 export const getGeneralError: GetGeneralError = (params = {}) => {
 
     const { error, type = GeneralError, message } = params;
     const errorMessage = message || (error && error.message);
     const errorType = getErrorType(error);
 
-    if(errorType === 'general'){
+    if(errorType === 'GeneralError'){
         return {
             type,
             message: errorMessage
         }     
     }else{
-    // mongo and yup
-    if(errorMessage){
-        error.message = errorMessage
-    }
-    return getValidationError(error)
+        // ValidationErrorMongo | ValidationErrorYup
+        if(errorMessage){
+            error.message = errorMessage;
+        }
+        return getValidationError(error)
     }
 
 
@@ -87,7 +88,7 @@ export const getValidationError: GetValidationError = (error) =>  {
     const errorType = getErrorType(error);
 
     //return error;
-    if(errorType === 'yup'){
+    if(errorType === 'ValidationErrorYup'){
         const { name, inner, value, errors, message: yupMessage } = error as yup.ValidationError;
         return {
             type: name,
@@ -121,16 +122,16 @@ export const getValidationError: GetValidationError = (error) =>  {
 
 }
 
-type GetErrorType = (error) => 'mongo' | 'yup' | 'general'
+type GetErrorType = (error) => 'ValidationErrorMongo' | 'ValidationErrorYup' | 'GeneralError'
 
 
 const getErrorType: GetErrorType = (error: ErrorObject) => {
     const isMongo = error instanceof mongoose.Error.ValidationError
     const isYup = error instanceof yup.ValidationError
 
-    if(isMongo){return 'mongo';}
-    if(isYup){return 'yup';}
-    return 'general';
+    if(isMongo){return 'ValidationErrorMongo';}
+    if(isYup){return 'ValidationErrorYup';}
+    return 'GeneralError';
 }
 
 

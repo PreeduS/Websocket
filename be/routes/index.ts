@@ -5,14 +5,15 @@ import passport from 'passport';
 import groupRoute from './groupRoute';
 
 // controllers
-import signIn from 'app/controllers/signIn';
-import tokenSignIn from 'app/controllers/tokenSignIn';
-import signUp from 'app/controllers/signUp';
+//import signIn from 'app/controllers/signIn';
+//import tokenSignIn from 'app/controllers/tokenSignIn';
+//import signUp from 'app/controllers/signUp';
 import Users from 'app/controllers/users';
 import User from 'app/controllers/user';
-import getAccessToken from 'app/controllers/getAccessToken';
-import Auth from 'app/controllers/Auth';
-import Dev from 'app/controllers/dev';
+//import getAccessToken from 'app/controllers/getAccessToken';
+import Auth from 'app/controllers/auth';
+import OAuth from 'app/controllers/oauth';
+//import Dev from 'app/controllers/dev';
 
 // validations
 import signUpValidation from 'app/validations/signUp';
@@ -30,7 +31,7 @@ const setupRoutes = (app: Express) => {
         res.send('/') 
     })
     
-    //app.get('/oauth/callback/gmail/',Auth.gmailCallback)
+
    // app.get('/dev/sendPasswordResetMail/',Dev.sendPasswordResetMail)
     
     /*(req, res) => { 
@@ -38,15 +39,15 @@ const setupRoutes = (app: Express) => {
         res.send('/oauth/callback/gmail/') 
     })*/
     const oauthRoute = groupRoute(app, '/oauth');
-        oauthRoute.get('/callback/gmail/',Auth.gmailCallback);
-        oauthRoute.get('/gmail', Auth.gmail);
+        oauthRoute.get('/callback/gmail/',OAuth.gmailCallback);
+        oauthRoute.get('/gmail', OAuth.gmail);
     
     const authRoute = groupRoute(app, '/auth')
-        authRoute.post('/signIn', [signInValidation], signIn)
-        authRoute.post('/tokenSignIn', [tokenSignInValidation], tokenSignIn)
-        authRoute.post('/signUp', [signUpValidation], signUp)
+        authRoute.post('/signIn', [signInValidation], Auth.signIn)
+        authRoute.post('/tokenSignIn', [tokenSignInValidation], Auth.tokenSignIn)
+        authRoute.post('/signUp', [signUpValidation], Auth.signUp)
         //authRoute.get('/gmail',  Auth.gmail )
-        authRoute.post('/getAccessToken',[getAccessTokenValidation],  getAccessToken )
+        authRoute.post('/getAccessToken',[getAccessTokenValidation],  Auth.getAccessToken )
         // authRoute.get('/secret/local', [passport.authenticate('local', {session: false})] , (req, res) =>  res.send('secret local') )
         authRoute.get('/secret/jwt', [passport.authenticate('jwt', {session: false})] , (req, res) => {
              console.log('jwt')

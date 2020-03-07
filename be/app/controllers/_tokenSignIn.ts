@@ -3,9 +3,9 @@
 import { verifyRefreshToken, signAccessToken } from '../auth/utils/token/userTokens';
 import { UserJwtPayload } from 'app/common/types/user';
 
-// rename todo verifyAccessToken
+// rename todo refreshTokenSignIn?
 const tokenSignIn = async (req, res) => {
-    console.log('tokenSignIn')
+    
     const { refreshToken } = req.body; 
 
     try {

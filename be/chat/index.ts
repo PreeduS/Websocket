@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import { verifyRefreshToken } from 'app/auth/utils/token/userTokens';
 import { UserJwtPayload } from 'app/common/types/user';
+import commentService from 'app/services/comment'
 
 
 
@@ -23,11 +24,69 @@ const userType = {
 }
 
 
-wsServer.on('connection', (ws, request, client) => {
+wsServer.on('connection', async (ws, request, client) => {
     //ws.id = Math.random();  // or token
     ws.authenticated = false;
     ws.user = {}
     console.log('connection ... ', Array.from(wsServer.clients).filter((x:any) =>  x.user.username).map((x:any) => (x.user.username + ', ')) )
+
+
+    //temp
+    const comments = await commentService.find();
+
+console.log('comments', comments)
+    wsServer.clients.forEach((client: any) => {
+        if (client.readyState === WebSocket.OPEN) {
+
+
+            comments.forEach(x => {
+                client.send(JSON.stringify({
+                    type: messageType.comment,
+                    data: {
+                        comment: x.comment,
+                        username: x.user.username
+                    }
+                }));
+            })
+            // send comments
+            //if(type === messageType.comment){
+
+           // }
+
+        }
+    })
+
+
+// ------------_ tmp
+/*
+setInterval(()=>{
+    wsServer.clients.forEach((client: any) => {
+        if (client.readyState === WebSocket.OPEN) {
+    
+    
+           
+                client.send(JSON.stringify({
+                    type: messageType.comment,
+                    data: {
+                        comment: 'comment '+Date.now(),
+                        username: 'x.user.username'
+                    }
+                }));
+           
+            // send comments
+            //if(type === messageType.comment){
+    
+           // }
+    
+        }
+    })
+},800)
+*/
+
+// ------------_ tmp
+
+
+
 
     // send all signedIn users
     ws.send(JSON.stringify({
@@ -161,6 +220,8 @@ wsServer.on('connection', (ws, request, client) => {
                                 username: ws.user.username
                             }
                         }));
+
+                        commentService.insert({ comment: data.comment })
                     }
 
                 }

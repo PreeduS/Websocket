@@ -1,0 +1,25 @@
+
+:host{
+    display: flex;
+    flex:1;
+}
+
+.wrapper{
+    display: flex;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.item {
+    margin: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+.divider {
+    margin: 0 1rem;
+    border-bottom: 1px solid rgb(232, 232, 232);
+
+}

@@ -19,6 +19,10 @@ import { ChatFooterComponent } from './pages/chat/chat-footer/chat-footer.compon
 import { ChatBodyComponent } from './pages/chat/chat-body/chat-body.component';
 import { ChatCommentComponent } from './pages/chat/chat-body/chat-comment/chat-comment.component';
 import { ResetPasswordComponent } from './pages/user/callback/reset-password/reset-password.component';
+import { SettingsComponent } from './pages/user/settings/settings.component';
+import { ProfileComponent } from './pages/user/settings/subpages/profile/profile.component';
+import { PasswordComponent } from './pages/user/settings/subpages/password/password.component';
+import { SidemenuComponent } from './pages/user/settings/sidemenu/sidemenu.component';
 
  
 
@@ -35,6 +39,11 @@ import { ResetPasswordComponent } from './pages/user/callback/reset-password/res
     ChatBodyComponent,
     ChatCommentComponent,
     ResetPasswordComponent,
+    SettingsComponent,
+    ProfileComponent,
+    PasswordComponent,
+    SidemenuComponent,
+    
 
   ],
   imports: [

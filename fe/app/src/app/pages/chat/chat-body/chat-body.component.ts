@@ -18,10 +18,19 @@ export class ChatBodyComponent implements OnInit {
 
     ngAfterViewChecked(){
     if(this.commentsLength !== this.comments.length){
-      console.log('ngDoCheck trigger', this.commentsLength, this.comments.length)
+      //console.log('ngDoCheck trigger', this.commentsLength, this.comments.length)
       const commentsWrapperRef = this.commentsWrapper.nativeElement;
-      commentsWrapperRef.scrollTop = commentsWrapperRef.scrollHeight
+
+    //  console.log('commentsWrapperRef.scrollHeight', commentsWrapperRef.scrollHeight)
+    //  console.log('commentsWrapperRef.scrollTop', commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight)
+    //  console.log('commentsWrapperRef.dif', commentsWrapperRef.scrollHeight-(commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight),'\n\n')
+      const scrollFromBottom = commentsWrapperRef.scrollHeight- (commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight);
+      if(scrollFromBottom <= 60){
+ 
+        commentsWrapperRef.scrollTop = commentsWrapperRef.scrollHeight
+      }
       this.commentsLength = this.comments.length;
+
     }
   }
 

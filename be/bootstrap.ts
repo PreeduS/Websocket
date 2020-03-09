@@ -3,20 +3,19 @@ import * as bodyParser from 'body-parser';
 import cors from 'cors';
 import setupMongoose from './app/mongoose/setupMongoose';
 import setupPassport from './app/auth/localStrategy/localStrategy';
-import setupRoutes from './routes/'
-import GmailAuth from 'app/external/gmail/auth';
+import setupRoutes from './routes/';
 
 const setupMiddleware = (app: Express) => {
     app.use('/',bodyParser.json());
-    app.use('/',cors())
+    app.use('/',cors());
 }
 
 export default (app: Express) => {
     setupMiddleware(app);
     setupMongoose();
-    setupRoutes(app)
-    setupPassport()
-    //GmailAuth.init()
+    setupRoutes(app);
+    setupPassport();
+
 
 
 }

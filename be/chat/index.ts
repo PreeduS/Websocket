@@ -1,60 +1,46 @@
 import WebSocket from 'ws';
 import { verifyRefreshToken } from 'app/auth/utils/token/userTokens';
 import { UserJwtPayload } from 'app/common/types/user';
-import commentService from 'app/services/comment'
+import commentService from 'app/services/comment';
 
-
+import { 
+    getUser, 
+    getUsers, 
+    getComment, 
+    getComments,
+    getAuth,
+    userType,
+    messageType
+} from './getMessages'
 
 const wsServer = new WebSocket.Server({
-   // port: 5001
+    // port: 5001
     noServer: true
 })
 
 
-const messageType = {
-    auth: 'auth',
-    user: 'user',
-    comment: 'comment',
-}
-
-const userType = {
-    signIn: 'signIn',
-    signOut: 'signOut',
-    getUsers: 'getUsers',
-}
 
 
 wsServer.on('connection', async (ws, request, client) => {
-    //ws.id = Math.random();  // or token
+    // ws.id = Math.random();  // or token
     ws.authenticated = false;
     ws.user = {}
-    console.log('connection ... ', Array.from(wsServer.clients).filter((x:any) =>  x.user.username).map((x:any) => (x.user.username + ', ')) )
-
+    //  console.log('connection ... ', Array.from(wsServer.clients).filter((x:any) =>  x.user.username).map((x:any) => (x.user.username + ', ')) )
 
     //temp
-    const comments = await commentService.find();
-
-console.log('comments', comments)
-    wsServer.clients.forEach((client: any) => {
+    const comments = await commentService.find({limit: 100});
+    // console.log('comments', comments)
+    const updatedComments = getComments({ comments })
+    ws.send(updatedComments);
+    /*wsServer.clients.forEach((client: any) => {
         if (client.readyState === WebSocket.OPEN) {
+            client.send(updatedComments);
 
-
-            comments.forEach(x => {
-                client.send(JSON.stringify({
-                    type: messageType.comment,
-                    data: {
-                        comment: x.comment,
-                        username: x.user.username
-                    }
-                }));
-            })
-            // send comments
-            //if(type === messageType.comment){
-
-           // }
-
+            //comments.forEach(x => {
+                //client.send( getComment({ comment: x.comment, username: x.user.username }) );
+            //})
         }
-    })
+    })*/
 
 
 // ------------_ tmp
@@ -62,73 +48,45 @@ console.log('comments', comments)
 setInterval(()=>{
     wsServer.clients.forEach((client: any) => {
         if (client.readyState === WebSocket.OPEN) {
-    
-    
-           
-                client.send(JSON.stringify({
-                    type: messageType.comment,
-                    data: {
-                        comment: 'comment '+Date.now(),
-                        username: 'x.user.username'
-                    }
-                }));
-           
-            // send comments
-            //if(type === messageType.comment){
-    
-           // }
-    
+            client.send( getComment({ comment:'comment '+Date.now(), username:'x.user.username' }) );
         }
     })
 },800)
 */
-
 // ------------_ tmp
 
 
-
-
     // send all signedIn users
-    ws.send(JSON.stringify({
-        type: messageType.user,
-        data: {
-            users: Array.from(wsServer.clients).filter((x:any) =>  x.user.username).map((x:any) => ({
-                username:x.user.username,
-                //duplicate:x.user.duplicate,
+    const users = Array.from(wsServer.clients).filter((x:any) =>  x.user.username).map((x:any) => ({
+        username:x.user.username,
+        //duplicate:x.user.duplicate,
 
-            })),
-            type: userType.getUsers,
-        }
-    }));
+    }))
+    //ws.send( getUsers({userType: userType.getUsers, users}) )
+    ws.send( getUsers({users}) )
+
 
 
     ws.on('close', function close(e) {
-        console.log('---- 2-disconnected ',e, ws.user);
+        //console.log('---- 2-disconnected ',e, ws.user);
 
    /*     const sameSessions = Array.from(wsServer.clients).filter((x:any) =>  x.user.username === ws.user.username)
 
         console.log('close ',Array.from(wsServer.clients).filter((x:any) =>  x.user.username === ws.user.username).map((x:any) => ({
             username:x.user.username,
-
         })))*/
 
         // send user signOut
         wsServer.clients.forEach((client: any) => {
             if (client.readyState === WebSocket.OPEN ) {
-                client.send(JSON.stringify({
-                    type: messageType.user,
-                    data: {
-                        username: ws.user.username,
-                        type: userType.signOut
-                    }
-                }));
+                client.send( getUser({userType: userType.signOut, username: ws.user.username}) );
             }
         })
 
     });
     
-    ws.on('message', (message: any) => {
-         console.log('message: ',message, ws.authenticated)
+    ws.on('message', async (message: any) => {
+        //console.log('message: ',message, ws.authenticated)
         const { data, type } = JSON.parse(message)
         
         if(!ws.authenticated && type === messageType.auth){
@@ -145,94 +103,49 @@ setInterval(()=>{
                     username,
                    // duplicate: alreadyExists
                 }
+                ws.send( getAuth({authenticated: true, user: refreshTokenPayload.user}) );
 
-                // send all signedIn users
-               /* ws.send(JSON.stringify({
-                    type: messageType.user,
-                    data: {
-                        users: Array.from(wsServer.clients).filter((x:any) => x.user.username !== username && x.user.username).map((x:any) => ({username:x.user.username})),
-                        type: userType.getUsers
-                    }
-                }));*/
-
-                ws.send(JSON.stringify({
-                    type: messageType.auth,
-                    data: {
-                        authenticated: true,
-                        user: refreshTokenPayload.user
-                    }
-                
-                }));
                 
                 // send user signIn
                 wsServer.clients.forEach((client: any) => {
                     if (client.readyState === WebSocket.OPEN ) {
-                        client.send(JSON.stringify({
-                            type: messageType.user,
-                            data: {
-                                username,
-                                type: userType.signIn
-                            }
-                        }));
-
+                        client.send( getUser({userType: userType.signIn, username}) );
                     }
                 })
-
-
 
 
             }catch(e){
                 // on expired
                 ws.authenticated = false
                 ws.user = {}
-                ws.send(JSON.stringify({
-                    type: messageType.auth,
-                    data: {
-                        authenticated: false
-                    }
-              
-                }));
-/*
-                // send all signedIn users
-                ws.send(JSON.stringify({
-                    type: messageType.user,
-                    data: {
-                        users: Array.from(wsServer.clients).filter((x:any) =>  x.user.username).map((x:any) => ({username:x.user.username})),
-                        type: userType.getUsers
-                    }
-                }));
-*/
+                ws.send( getAuth({authenticated: false}) );
                 ws.close()
             }
 
 
         }else if(ws.authenticated){
 
-            wsServer.clients.forEach((client: any) => {
-                if (client.readyState === WebSocket.OPEN) {
 
-                    // send comments
-                    if(type === messageType.comment){
-                        client.send(JSON.stringify({
-                            type,
-                            data: {
-                                comment: data.comment,
-                                username: ws.user.username
-                            }
-                        }));
-
-                        commentService.insert({ comment: data.comment })
+            try{
+                await commentService.insertByUser({ comment: data.comment, username: ws.user.username })
+                wsServer.clients.forEach((client: any) => {
+                    if (client.readyState === WebSocket.OPEN) {
+    
+                        // send comments
+                        if(type === messageType.comment){
+                            client.send( getComment({ comment: data.comment, username: ws.user.username }) );
+    
+                            
+                        }
+    
                     }
-
-                }
-            })
+                })
+            }catch(error){}
         
             
         }else{
             ws.close()
-        }
-            
-
+        }            
 
     })
 })

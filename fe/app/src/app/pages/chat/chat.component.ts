@@ -26,7 +26,7 @@ test(event) {
 
     chatAuthenticated: boolean; 
     comments = []
-    users = []
+    users: Array<{username: string, id?: string | number | null}> = []
     constructor(private commentsService: CommentsService, private userService: UserService){
         console.log(this.commentsService)
 
@@ -46,6 +46,21 @@ test(event) {
     }
 
     ngOnInit(){
+
+        this.commentsService.getOldComments().subscribe(oldComments => {
+        
+            const updatedOldComments = oldComments.map(x => ({
+                user:{
+                    username: x.username
+                },
+                content:{
+                    comment: x.comment
+                },
+            }))
+
+            this.comments.unshift(...updatedOldComments)
+
+        })
      
         this.commentsService.getNewComment().subscribe(newComment => {
             console.log(newComment)
@@ -64,23 +79,26 @@ test(event) {
         this.commentsService.getNewUser().subscribe(newUser => {
             console.log('newUser ',newUser)
             const { type } = newUser;
+      
 
             if(type === 'signIn'){
                 const { username } = newUser;
-                const alreadyExists = this.users.find(x => x.name === username) !== undefined;
+                const alreadyExists = this.users.find(x => x.username === username) !== undefined;
                 if(!alreadyExists){
                     this.users.push({
                         id: null,
-                        name: username
+                        //name: username
+                        username
                     })
                 }
             }else if(type === 'signOut'){
                 const { username } = newUser;
                 if(username){
-                    this.users = this.users.filter(x => x.name !== username);
+                    this.users = this.users.filter(x => x.username !== username);
                 }
             
-            }else if(type === 'getUsers'){
+            }
+            /*else if(type === 'getUsers'){
                 const { users } = newUser;
                 const updatedUsers = []
                 users.forEach(({username}) => {
@@ -92,7 +110,23 @@ test(event) {
                     }
                 })
                 this.users = updatedUsers; //users.map(x => ({name: x.username}))
-            }
+            }*/
+
+        })
+
+        this.commentsService.getUsers().subscribe(newUsers => {
+            const { users } = newUsers;
+            const updatedUsers = []
+            users.forEach(({username}) => {
+                const alreadyExists = updatedUsers.find(x => x.name === username) !== undefined;
+                if(!alreadyExists){
+                    updatedUsers.push({
+                        //name: username
+                        username
+                    })
+                }
+            })
+            this.users = updatedUsers; //users.map(x => ({name: x.username}))
 
         })
 

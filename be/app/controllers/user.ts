@@ -127,9 +127,8 @@ class User {
         }
     }
 
-    // profile/settings
-    imageUpload = async (req, res) => {
 
+    private imageUploadValidation = (base64Image: string) => {
 
         /*
             # offset 0
@@ -144,6 +143,32 @@ class User {
             # end with      49 45 4E 44 AE 42 60 82
         */
 
+        const magicNumbers = [
+            { 
+                header: 'FFD8',
+                trailer: 'FFD9',
+                type: 'jpg/jpeg' 
+            },
+            {   
+                header: '89504E47',
+                trailer: '49454E44AE426082',
+                type: 'png'
+            }
+        ]
+        const startsWith = (string, substring) => string.indexOf(substring) === 0;
+        const endsWith = (string, substring) => string.indexOf(substring, string.length - substring.length ) !== -1;
+
+        var buf = new Buffer(base64Image, 'base64');
+        const header = buf.slice(0,4).toString('hex').toUpperCase();                // buf.slice(0,2)
+        const trailer = buf.slice(buf.length-8).toString('hex').toUpperCase();      // buf.slice(buf.length-2)
+  
+
+    }
+    // profile/settings
+    imageUpload = async (req, res) => {
+
+
+
 
         /*
         
@@ -156,7 +181,8 @@ class User {
             // parseInt("10101001", 2).toString(16).toUpperCase()
         */
 
-        const base64Upload = req.body.image;//'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA';      
+
+        const base64Upload = req.body.image;//'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA';   
         const splitBy = ';base64,';
         const splitByExists = base64Upload.includes(splitBy);
 
@@ -164,6 +190,12 @@ class User {
             const uploadArray = base64Upload.split(splitBy);
             const mimeType = uploadArray[0];
             const base64Image = uploadArray[1];
+
+
+
+
+
+            return res.send('upload tmp')
             
             if(mimeType && base64Image){
                 const fileName = `image_${Date.now()}_${Math.random()*100}.png`;

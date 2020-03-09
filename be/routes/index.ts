@@ -13,7 +13,7 @@ import User from 'app/controllers/user';
 //import getAccessToken from 'app/controllers/getAccessToken';
 import Auth from 'app/controllers/auth';
 import OAuth from 'app/controllers/oauth';
-//import Dev from 'app/controllers/dev';
+
 
 // validations
 import signUpValidation from 'app/validations/signUp';
@@ -32,12 +32,7 @@ const setupRoutes = (app: Express) => {
     })
     
 
-   // app.get('/dev/sendPasswordResetMail/',Dev.sendPasswordResetMail)
     
-    /*(req, res) => { 
-            console.log('path ',req.path)
-        res.send('/oauth/callback/gmail/') 
-    })*/
     const oauthRoute = groupRoute(app, '/oauth');
         oauthRoute.get('/callback/gmail/',OAuth.gmailCallback);
         oauthRoute.get('/gmail', OAuth.gmail);

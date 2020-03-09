@@ -22,13 +22,14 @@ class Comment {
             }
         })
         .sort({createdAt: 1})
-        //.skip(skip)
-        //.limit(limit)
+        .skip(skip)
+        .limit(limit)
     }
 
-    insert = async ({comment}) => {
+    insertByUser = async ({comment, username}) => {
+
         try {
-            const userResult = await UserSchema.findOne({username:'testuser2'})
+            const userResult = await UserSchema.findOne({username})
     
        
             const commentResult = new CommentSchema({

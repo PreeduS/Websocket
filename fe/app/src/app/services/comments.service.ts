@@ -2,37 +2,30 @@ import { Injectable } from '@angular/core';
 import { Subject, from, BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 
+import { messageType, userType, CommentData, CommentsData, UserData, UsersData, AuthData } from 'src/app/commons/types/chat';
+type MessageTypes = CommentData | CommentsData | UserData | UsersData | AuthData;
 
 @Injectable({
   providedIn: 'root',
 })
-export class CommentsService {          // rename to chatService
+export class CommentsService {          // todo - rename to chatService
     private socket; 
-    private commentSub; //= new Subject<any>();
-    private commentsSub; //= new Subject<any[]>();
-    private userSub; //= new Subject<any>();
-    private comments;
+    private commentSub: Subject<{username: string, comment: string}>; //= new Subject<any>();
+    private commentsSub: Subject<Array<{comment: string, username: string}>>;
+    private userSub: Subject<UserData['data']>; 
+    private usersSub: Subject< UsersData['data']>; 
+    private comments: Array<{comment: string, username: string}>;
     private authenticated: BehaviorSubject<boolean>;
     //private username: string;
 
     constructor(private userService: UserService) {
         this.comments = [];
-        this.commentSub = new Subject<any>();
-        this.commentsSub = new Subject<any[]>();
-        this.userSub = new Subject<any>();
+        this.commentSub = new Subject<{username: string, comment: string}>();
+        this.commentsSub = new Subject<Array<{comment: string, username: string}>>();
+        this.userSub = new Subject<UserData['data'] >();
+        this.usersSub = new Subject<UsersData['data']>();
 
         this.authenticated = new BehaviorSubject(false);
-
-        /*this.userService.getUser().subscribe(user => {
-            if(user.username){
-                this.username = user.username
-            }
-        })*/
-        //this.socket = new WebSocket('ws://localhost:5001');
-
-        //this.socket = new WebSocket('ws://localhost:5000');
-        //this.socket.onopen = this.onOpen;
-        //this.socket.onmessage = this.onMessage;
 
     }
     isAuthenticated = () => this.authenticated;
@@ -66,7 +59,7 @@ export class CommentsService {          // rename to chatService
         const refreshToken = this.userService.getRefreshToken();
         if(accessToken && refreshToken){
             this.socket.send(JSON.stringify({
-                type: 'auth',
+                type: messageType.auth,
                 data:  {
                     accessToken ,
                     refreshToken ,
@@ -83,50 +76,69 @@ export class CommentsService {          // rename to chatService
     }
 
     private onMessage = (event) =>{
-        console.log('onmessage event', event)
-        const { data, type } = JSON.parse(event.data);
-        console.log('onmessage data', data, type)
+       
+        //const { data, type } = JSON.parse(event.data);
+        const response = JSON.parse(event.data) as MessageTypes;
+        const { data, type } = response
+        //console.log('onmessage data', data, type)
+        console.log('onmessage event', event, response)
 
-
-        if(type === 'auth'){
+        if(type === messageType.auth ){
             this.onSignInMessage(data)
-        }else if(type === 'comment'){
+        }else if(response.type === messageType.comment){
             const comment = {
-                comment: data.comment,
-                username: data.username
-            }
+                comment: response.data.comment,
+                username: response.data.username
+            } 
+
             this.commentSub.next(comment);
             
-            this.comments.push(comment);
+            //this.comments.push(comment);
+            //this.commentsSub.next(this.comments.slice())
+
+        }else if(response.type === messageType.comments){
+
+
+            //this.commentSub.next(comment);
+            console.log(' onmessage here ----  messageType.comments  ', messageType.comments, response)
+            this.comments = [...response.data.comments]
             this.commentsSub.next(this.comments.slice())
 
-        }else if(type === 'user'){
-            const { type } = data;
+        }
+        else if(response.type === messageType.user ){
+            //const { type } = response.data;
 
-            if(type === 'signIn' || type === 'signOut'){
+            if(response.data.type === userType.signIn  || response.data.type  === userType.signOut){
                 const user = {
-                    username: data.username,
-                    type: data.type,
+                    username: response.data.username,
+                    type: response.data.type,
                 }
     
                 this.userSub.next(user);
-            }else if(type === 'getUsers'){
+            }/*else if(response.data.type === userType.getUsers){
                 const user = {
-                    users: data.users,
-                    type: data.type,
+                    users: response.data.users,
+                    type: response.data.type,
                 }
     
                 this.userSub.next(user);
+            }*/
+
+        }
+        else if(response.type === messageType.users ){
+            const user = {
+                users: response.data.users,
+                //type: response.data.type,
             }
 
+            this.usersSub.next(user);
         }
     }
 
     sendComment(comment: string = ''){
-        //this.socket.send( comment + ' ' + Math.random().toFixed(2) )
+
         this.socket.send(JSON.stringify({
-            type: 'comment',
-            //data: comment + ' ' + Math.random().toFixed(2) 
+            type: messageType.comment,
             data: {
                 comment,
                 //username: this.username
@@ -144,12 +156,16 @@ export class CommentsService {          // rename to chatService
     getNewComment(){
         return this.commentSub;
     }
-    getComments(){
+    //getComments(){      // getOlderComments
+    getOldComments(){     
         return this.commentsSub;
     }
 
     getNewUser(){       // getUpdatedUsers
         return this.userSub;
+    }
+    getUsers(){        
+        return this.usersSub;
     }
 
 }

@@ -129,7 +129,13 @@ class User {
 
 
     private imageUploadValidation = (base64Image: string) => {
+        let returnData = { valid: false, ext: null };
 
+        const splitBy = ';base64,';
+        const splitByExists = base64Image.includes(splitBy);
+        if(splitByExists){
+            return returnData;
+        }
         /*
             # offset 0
             .jpg/.jpeg
@@ -147,21 +153,44 @@ class User {
             { 
                 header: 'FFD8',
                 trailer: 'FFD9',
-                type: 'jpg/jpeg' 
+                ext: 'jpg' 
             },
             {   
                 header: '89504E47',
                 trailer: '49454E44AE426082',
-                type: 'png'
-            }
+                ext: 'png'
+            },
+            {   
+                header: '424D',
+                trailer: null,
+                ext: 'bmp'
+            },
+            {   
+                header: '49492A00',
+                trailer: null,
+                ext: 'tif'
+            },
         ]
         const startsWith = (string, substring) => string.indexOf(substring) === 0;
         const endsWith = (string, substring) => string.indexOf(substring, string.length - substring.length ) !== -1;
 
         var buf = new Buffer(base64Image, 'base64');
-        const header = buf.slice(0,4).toString('hex').toUpperCase();                // buf.slice(0,2)
-        const trailer = buf.slice(buf.length-8).toString('hex').toUpperCase();      // buf.slice(buf.length-2)
-  
+        const hexValue = buf.toString('hex').toUpperCase()
+        //const header = buf.slice(0,4).toString('hex').toUpperCase();                // buf.slice(0,2)
+        //const trailer = buf.slice(buf.length-12).toString('hex').toUpperCase();      // buf.slice(buf.length-2)
+
+
+        magicNumbers.forEach(mn => {
+            const validHeader =  mn.header === null ? true: startsWith(hexValue, mn.header);
+            const validTrailer =  mn.trailer === null ? true: endsWith(hexValue, mn.trailer);
+            if( validHeader && validTrailer){
+                returnData = {valid: true, ext: mn.ext};
+            }
+        });
+
+
+        return returnData
+
 
     }
     // profile/settings
@@ -193,21 +222,54 @@ class User {
 
 
 
+            const validationResult = this.imageUploadValidation(base64Image);
+
+
+
 
 
             return res.send('upload tmp')
             
             if(mimeType && base64Image){
-                const fileName = `image_${Date.now()}_${Math.random()*100}.png`;
+                const fileName = `image_${Date.now()}_${Math.random()*100}.png`;    // use uuid
                 const file = path.resolve('./app/static/private/'+fileName) ;
-                fs.writeFile(file, base64Image, {encoding: 'base64'}, function(err) {           // encoding: 'binary'
-                    if(err){
-                        console.log(err)
-                        return res.send('File upload error')
-                    }
-                    return res.send('File created: ' + fileName)
-                
-                });
+
+
+               // if(false){
+                    fs.open(file, 'wx', (err, fd) => {
+                        if (err) {
+                          if (err.code === 'EEXIST') {
+                            console.error('file already exists');
+                            return;
+                          }
+                      
+                          throw err;
+                        }
+
+
+                        fs.writeFile(file, base64Image, {encoding: 'base64'}, function(err) {           // encoding: 'binary'
+                            if(err){
+                                console.log(err)
+                                fs.close(fd, (err) => {
+                                    if (err) throw err;
+                                });
+                                return res.send('File upload error')
+                            }
+                            fs.close(fd, (err) => {
+                                if (err) throw err;
+                            });
+                            return res.send('File created: ' + fileName)
+                        
+                        });
+
+
+
+                    
+                      });
+    
+                //}
+
+
             }else{
                 return res.send('err')
             }

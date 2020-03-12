@@ -58,3 +58,54 @@ nodemon
 
 
     
+nodemon.json
+{
+    "ignore": ["**/*.test.ts", "**/*.spec.ts", "build","node_modules"],
+    "exec": "ts-node -r ./setupAlias.js ./index.ts",
+    "ext": "ts"
+  }
+
+
+---
+
+routes
+
+
+//app.get('/user/:id', [passport.authenticate('jwt', {session: false, /*successRedirect: '/user/d/self', failureRedirect: '/user/d/other'*/})], 
+//  app.get('/user/:username?', [passport.authenticate('jwt', {session: false, failureRedirect: '/user/other'})], 
+
+//app.get('/user/self',[passport.authenticate('jwt', {session: false})], (req, res) => {   console.log('req user self ',req.user);  res.send('/user/self ' + req.params.username) })
+//app.get('/user/other', (req, res) => {   console.log('req user other',req.user); res.send('/user/other '+ req.params.id) })
+
+
+
+/*app.get('/user', [passport.authenticate('jwt', {session: false})], (req, res) => {
+    
+    return res.send('user/self ' + req.user.username)
+}) */
+
+
+
+
+
+
+//const router = require('express').Router();
+
+//----
+//const setupRoutes = (app: Express) => {
+    //app.get('/', (req, res) => { res.send('home'); });
+
+    //app.use('/auth',router );
+
+//----
+
+//router.get('/test',  (req, res) =>  res.send('test') )
+//router.get('/secret/local', passport.authenticate('local', {session: false}) , (req, res) =>  res.send('secret local') )
+ 
+//router.get('/secret/jwt', passport.authenticate('jwt', {session: false}) , (req, res) =>  res.send('secret jwt') )
+
+//  passport.authenticate('local', { failureRedirect: '/login' }),
+
+
+    //router.post('/signIn', [signInValidation], signIn);
+    //router.post('/signUp', [signUpValidation], signUp);

@@ -2,27 +2,27 @@ import mongoose from 'mongoose';
 import * as yup from 'yup'
 
 
-const InternalServerError = 'InternalServerError';
-const ValidationError = 'ValidationError';
-const GeneralError = 'GeneralError';
+//const InternalServerError = 'InternalServerError';
+//const ValidationError = 'ValidationError';
+//const GeneralError = 'GeneralError';
 
 type TypeObject = {
-    InternalServerError: typeof InternalServerError
-    ValidationError: typeof ValidationError
-    GeneralError: typeof GeneralError
+    InternalServerError: 'InternalServerError'  //typeof InternalServerError
+    ValidationError: 'ValidationError'          //typeof ValidationError
+    GeneralError: 'GeneralError'                //typeof GeneralError
 }
 
 export const type: TypeObject = {
-    InternalServerError,
-    ValidationError,
-    GeneralError,
+    InternalServerError: 'InternalServerError',
+    ValidationError: 'ValidationError',
+    GeneralError: 'GeneralError',
 
 }
 
-type Type = 
-    typeof InternalServerError | 
-    typeof ValidationError | 
-    typeof GeneralError
+type Type = keyof TypeObject
+    //typeof InternalServerError | 
+    //typeof ValidationError | 
+    //typeof GeneralError
 
 type ErrorObject = mongoose.Error.ValidationError | yup.ValidationError | Error
 
@@ -42,27 +42,16 @@ type ValidationError = {
     errors: string[]
     inner: object[]
 }
-/*
-type ValidationError = {
-    // yup
-    type: string
-    message: string
-    errors: string[]
-    value: object
-    inner: object[]
-} | {
-    // mongo
-    type: string
-    message: string 
-    errors: object
-}
-*/
-type GetGeneralError = (params?: GeneralErrorParams) => GeneralError | ValidationError
+
+
+
+export type GetGeneralErrorResult =  GeneralError | ValidationError
+type GetGeneralError = (params?: GeneralErrorParams) => GetGeneralErrorResult //GeneralError | ValidationError
 
 // getError ?
 export const getGeneralError: GetGeneralError = (params = {}) => {
 
-    const { error, type = GeneralError, message } = params;
+    const { error, type = 'GeneralError', message } = params;
     const errorMessage = message || (error && error.message);
     const errorType = getErrorType(error);
 

@@ -98,13 +98,6 @@ class User {
                     return res.status(500).send(getGeneralError({type: type.InternalServerError}))
                 }
                 
-                /*const user = new UserSchema({
-                    username, 
-                    password: hashPassword,
-                    salt
-                    
-                });
-                */
                 user.password = hashPassword;
                 user.salt = salt;
                 try {

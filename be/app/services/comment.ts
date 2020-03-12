@@ -2,14 +2,14 @@ import CommentSchema from '../mongoose/schema/comment';
 import UserSchema from '../mongoose/schema/user';
 
 type FindArgs = {
-    skip?: number
-    limit?: number
+    skip: number
+    limit: number
 }
 const findDefaultArgs: FindArgs = { skip: 0, limit: 10 };
 
 class Comment {
 
-    find = ({skip = findDefaultArgs.skip, limit = findDefaultArgs.limit }:FindArgs = findDefaultArgs) => {
+    find = ({skip = findDefaultArgs.skip, limit = findDefaultArgs.limit }:Partial<FindArgs> = findDefaultArgs) => {
         return CommentSchema
         .find()
         //.populate('user','id username')

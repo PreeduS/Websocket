@@ -17,3 +17,17 @@ export const fileExistsAsync: FileExistsAsync = async(path) => {
     }
 
 }
+
+type ReadDirAsync = (path: string) => Promise<string[] | null>;
+export const readDirAsync: ReadDirAsync = async(path) => {
+    const fsReadDirAsync = promisify(fs.readdir);
+    const pathResolve = resolve(path);
+    try {
+        const result = await fsReadDirAsync(pathResolve);
+        return result;
+    }catch(error){
+        return null;
+    }
+    
+}
+

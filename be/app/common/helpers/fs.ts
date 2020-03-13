@@ -18,7 +18,19 @@ export const fileExistsAsync: FileExistsAsync = async(path) => {
 
 }
 
+type ReadDirAsync = (path: string) => Promise<string[] | null>;
 
+export const readDirAsync: ReadDirAsync = async(path) => {
+    const fsReadDirAsync = promisify(fs.readdir);
+    const pathResolve = resolve(path);
+    try {
+        const result = await fsReadDirAsync(pathResolve);
+        return result;
+    }catch(error){
+        return null;
+    }
+    
+}
 
 type ReadFileAsync = (path: string) => Promise<string>
 
@@ -51,28 +63,9 @@ export const writeFileAsync = async(path: string, content: string, flag = 'wx') 
         await fsCloseAsync(fd)
         return true;
     }catch(error){
-        //console.log(error)
         throw error
         //if (error.code === 'EEXIST') {}
-        //return false;
     }
-
-
-/*
-    fs.open(pathResolve, 'wx', (err, fd) => {
-        if (err) {
-          if (err.code === 'EEXIST') {
-            console.error('myfile already exists');
-            return;
-          }
-      
-          throw err;
-        }
-      
-        fsWriteFileAsync(pathResolve, content )
-      });
-*/
-
 
 }
 

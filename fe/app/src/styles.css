@@ -3,9 +3,18 @@
     box-sizing: border-box;
 }
 
+:root {
+    --app-background: rgb(245, 245, 245); 
+    --content-border: rgb(230, 230, 230);
+    --content-background: rgb(252, 252, 252);
+
+    --input-field-background: white;
+    --input-field-border: rgb(232, 232, 232);
+}
+
 body {
     margin: 0;
     padding: 0;
-    background: rgb(245, 245, 245);
+    background: var(--app-background);
     min-height: 100vh;
 }

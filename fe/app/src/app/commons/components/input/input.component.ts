@@ -14,8 +14,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input() disabled?: boolean = false; 
   @Output() valueChange = new EventEmitter<string>();
 
-  @Input() width: String = '10rem'
- // @Input() formControlName;
+  @Input() width: String = '10rem';
 
   getInputStyles = () => ({
     width: this.width

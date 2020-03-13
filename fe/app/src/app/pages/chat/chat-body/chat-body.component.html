@@ -7,8 +7,9 @@
     </div>
 
     <div class = "add-comment-wrapper">
-
+        <textarea (input) = "setCommentValue($event)" [value] = "commentValue"></textarea>
     </div>
+    <button (click)="addComment()">click</button>
 </div>
 
 <div class = "users-wrapper">

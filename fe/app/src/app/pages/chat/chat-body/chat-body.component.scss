@@ -22,9 +22,20 @@
     }
     .add-comment-wrapper{
         display: flex;
-        height: 4rem;
+        height: 5rem;
         border-top: 1px solid rgb(230, 230, 230);
-    
+        
+        textarea {
+            resize: none;
+            background: transparent;
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: .25rem;
+            padding-left: 0;
+            padding-right: 1rem;
+            margin-left: 3.5rem;
+        }
     }
     
     

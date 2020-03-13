@@ -23,6 +23,7 @@ import { SettingsComponent } from './pages/user/settings/settings.component';
 import { ProfileComponent } from './pages/user/settings/subpages/profile/profile.component';
 import { PasswordComponent } from './pages/user/settings/subpages/password/password.component';
 import { SidemenuComponent } from './pages/user/settings/sidemenu/sidemenu.component';
+import { ButtonComponent } from './commons/components/button/button.component';
 
  
 
@@ -43,6 +44,7 @@ import { SidemenuComponent } from './pages/user/settings/sidemenu/sidemenu.compo
     ProfileComponent,
     PasswordComponent,
     SidemenuComponent,
+    ButtonComponent,
     
 
   ],

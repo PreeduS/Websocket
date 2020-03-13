@@ -7,7 +7,7 @@
 
 <div class = "chat-wrapper">
     <div class = "body-wrapper">
-        <chat-body [comments] = "comments" [users] = "users"></chat-body>
+        <chat-body (commentChange) = "addComment($event)" [comments] = "comments" [users] = "users"></chat-body>
     </div>
     <div class = "users-wrapper" *ngIf = "false">
         <div *ngFor = "let user of users" class = "user">

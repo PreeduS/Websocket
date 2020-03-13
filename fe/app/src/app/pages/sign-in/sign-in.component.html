@@ -1,28 +1,31 @@
 
 
- 
-<form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
-    <app-input 
-        type="text" 
-        name = "username" 
-        formControlName = "username" 
-        label = "Username:"
+ <div class="wrapper">
+     Sign In: <br /> <br />
+     <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+         <app-input 
+            type="text" 
+            name = "username" 
+            formControlName = "username" 
+            label = "Username:"
+            width = "100%"
+             
+         >
+         </app-input>
+         <app-input 
+            type="password" 
+            name = "password" 
+            formControlName = "password" 
+            label = "Password:"
+            width = "100%"
+         >
+         </app-input>
+     
+      
+         <br />
+         <input type="submit" value="Submit" />
+     
         
-    >
-    </app-input>
-    <app-input 
-        type="password" 
-        name = "password" 
-        formControlName = "password" 
-        label = "Password:"
-         
-    >
-    </app-input>
+     </form>
 
- 
-    <br />
-    <input type="submit" value="Submit" />
-
-   
-</form>
-
+ </div>     

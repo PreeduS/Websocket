@@ -12,7 +12,7 @@
     flex-direction: column;
 
     //background: rgb(240, 240, 240); 
-    border: 1px solid rgb(230, 230, 230);
+    border: 1px solid var(--content-border);
 
     .comments-wrapper {
         flex: 1;
@@ -23,7 +23,7 @@
     .add-comment-wrapper{
         display: flex;
         height: 4rem;
-        border-top: 1px solid rgb(230, 230, 230);
+        border-top: 1px solid var(--content-border);
     
     }
     
@@ -37,7 +37,7 @@
     flex-direction: column;
     flex: 0 0 14rem;
     padding: .5rem;
-    border: 1px solid rgb(230, 230, 230);
+    border: 1px solid var(--content-border);
     margin-left: 1rem;
     overflow-y: auto;
     //background: rgb(235, 235, 235); 

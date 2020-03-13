@@ -5,9 +5,13 @@
     margin-bottom: .5rem;
 }
 input {
-    border:1px solid gray;
+    border: 1px solid var(--input-field-border);
+    background: var(--input-field-background);
     height: 2rem;
     outline: none;
+    padding: 0 .5rem;
+    color: rgb(40,40,40);
+    font-size: .75rem;
 
 }
 .error{

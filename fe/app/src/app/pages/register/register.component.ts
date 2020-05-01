@@ -26,20 +26,7 @@ export class RegisterComponent implements OnInit {
   }
 
   // labels
-  getPasswordError(){
-    const formControl = this.signUpForm.get('passwordGroup.password');
 
-    if(this.hasGeneralError(formControl)){
-      if(formControl.errors.required){
-        return 'Please provide a value';
-      }
-      if(formControl.errors.minlength){
-        return `At least ${formControl.errors.minlength.requiredLength} characters are required`
-      }
-      return 'Invalid password'
-    }
-    return ''
-  }
 
   getUsernameError(){
     const formControl = this.signUpForm.get('username');
@@ -57,6 +44,22 @@ export class RegisterComponent implements OnInit {
     return ''
 
   }
+
+  getPasswordError(){
+    const formControl = this.signUpForm.get('passwordGroup.password');
+
+    if(this.hasGeneralError(formControl)){
+      if(formControl.errors.required){
+        return 'Please provide a value';
+      }
+      if(formControl.errors.minlength){
+        return `At least ${formControl.errors.minlength.requiredLength} characters are required`
+      }
+      return 'Invalid password'
+    }
+    return ''
+  }
+
   getPassword2Error(){
     const formControl = this.signUpForm.get('passwordGroup.password2');
 

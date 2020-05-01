@@ -1,3 +1,5 @@
-<div class = "wrapper" (click) = "onClick($event)">
-    {{label}}
-</div>
+<button class = "wrapper" [type] = "submit ? 'submit': 'button'" (click) = "onClick($event)">
+    <div class="content">
+        <ng-content></ng-content>
+    </div>
+</button>

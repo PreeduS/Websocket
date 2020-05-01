@@ -4,12 +4,16 @@
 }
 
 :root {
-    --app-background: rgb(245, 245, 245); 
+    --app-background: rgb(245, 246, 250); /*rgb(245, 245, 245);*/
     --content-border: rgb(230, 230, 230);
     --content-background: rgb(252, 252, 252);
 
-    --input-field-background: white;
+    --input-field-background: rgb(250, 250, 250);
     --input-field-border: rgb(232, 232, 232);
+
+    --input-button-background: rgb(250, 250, 250);
+    --input-button-background-hover: rgb(250, 250, 250);
+    --input-button-border: rgb(232, 232, 232);
 }
 
 body {

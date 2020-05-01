@@ -56,9 +56,7 @@ const setupRoutes = (app: Express) => {
     app.post('/user/sendResetPasswordToken', User.sendResetPasswordToken)            // sendPasswordResetMail
     app.post('/user/resetPassword/:token', User.resetPassword)              //callback
     app.get('/test', (req, res) => {
-     
-        res.send('testt')
-        
+        res.send('testt');
     })
 
     app.all('*', (req, res) => { res.send('/fallback') });

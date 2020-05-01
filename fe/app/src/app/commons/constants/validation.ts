@@ -2,7 +2,7 @@
 export const user = {
     username: {
         length:{
-            min: 8,
+            min: 6,
             max: 32,
         },
         pattern: '^[a-zA-Z\- ]+$'

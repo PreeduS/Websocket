@@ -1,31 +1,35 @@
 
 
- <div class="wrapper">
-     Sign In: <br /> <br />
-     <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
-         <app-input 
+<div class="wrapper">
+    Sign in: <br /> <br />
+    <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+        <app-input 
             type="text" 
             name = "username" 
             formControlName = "username" 
             label = "Username:"
+            [error] = "getUsernameError()"
             width = "100%"
-             
-         >
-         </app-input>
-         <app-input 
+                
+        >
+        </app-input>
+        <app-input 
             type="password" 
             name = "password" 
             formControlName = "password" 
             label = "Password:"
+            [error] = "getPasswordError()"
             width = "100%"
-         >
-         </app-input>
-     
-      
-         <br />
-         <input type="submit" value="Submit" />
-     
-        
-     </form>
+        >
+        </app-input>
+    
+    
+        <br />
 
- </div>     
+        <app-button [submit] = "true">Sign in</app-button>
+  
+    
+    
+    </form>
+
+</div>     

@@ -20,7 +20,7 @@ import OAuth from 'app/controllers/oauth';
 import AuthValidation from 'app/validations/Auth'
 
 const setupRoutes = (app: Express) => {
-    app.use('/', (req, res, next) => { 
+app.use('/', (req, res, next) => { 
             console.log('path ',req.path)
         next()
     })

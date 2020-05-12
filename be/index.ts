@@ -11,6 +11,7 @@ if (result.error) {
 const app = express();
 const port = process.env.PORT || 5000;
 
+console.log('process.env.NODE_ENV : ',process.env.NODE_ENV)
 
 bootstrap(app)
 

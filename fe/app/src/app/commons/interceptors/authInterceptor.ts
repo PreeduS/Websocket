@@ -1,8 +1,9 @@
 import { HttpInterceptor, HttpRequest, HttpClient, HttpHandler, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError, retry, switchMap, filter  } from 'rxjs/operators';
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { UserService } from 'src/app/services/user.service'
+import { environment } from './../../../environments/environment';
 
 
 @Injectable()
@@ -14,7 +15,8 @@ export class AuthInterceptor implements HttpInterceptor {
         const refreshToken = this.userService.getRefreshToken();
         let headers = new HttpHeaders()
         const accessToken = this.userService.getAccessToken();
-        const baseUrl = 'http://localhost:5000';
+        //const baseUrl = 'http://localhost:5000';
+        const baseUrl = environment.endpoint
         console.log('accessToken', accessToken)
         if(accessToken){
          

@@ -4,8 +4,12 @@ WORKDIR /home/node/frontend
 USER node
 
 # Build frontend 
-#RUN mkdir frontend
 COPY --chown=node:node . ./
+
+RUN export API_HOST=${API_HOST:-http://localhost} \
+    export API_PORT=${API_PORT:-3000} \
+    envsubst '${API_HOST} ${API_PORT}' < app/src/environments/environment.prod.ts > app/src/environments/environment.prod.ts
+
 RUN npm --prefix app ci
 RUN npm --prefix app run build
 

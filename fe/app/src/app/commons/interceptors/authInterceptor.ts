@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
         let headers = new HttpHeaders()
         const accessToken = this.userService.getAccessToken();
         //const baseUrl = 'http://localhost:5000';
-        const baseUrl = environment.endpoint
+	const baseUrl = environment.endpoint;
         console.log('accessToken', accessToken)
         if(accessToken){
          

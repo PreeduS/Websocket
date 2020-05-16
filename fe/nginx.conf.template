@@ -30,13 +30,15 @@ http {
     gzip_types text/plain text/css application/javascript application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
 
     server {
-        listen 80;
+        listen *:80;
+	listen [::]:80;
         # logs location
         access_log /var/log/nginx/access.log compression;
 
         root /var/www;
         # server as index
         index index.html index.htm;
+
 
         location / {
             # Checks the existence of files or dirs in the specified order. 
@@ -48,8 +50,11 @@ http {
 
         # Backend proxy
         location /api/ {
-            proxy_pass ${API_HOST}:${API_PORT}/;
+         #   rewrite ^/api/(.*) $1 break;
+         #   resolver 127.0.0.11 ipv6=off;
+	     proxy_pass ${API_HOST}:${API_PORT}/;
         }
+
 
 
         location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {

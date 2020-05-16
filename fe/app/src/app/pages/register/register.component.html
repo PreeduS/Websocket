@@ -12,6 +12,15 @@
             width = "100%"
         >
         </app-input>
+        <app-input 
+            type="text" 
+            name = "email" 
+            formControlName = "email" 
+            [error] = "getEmailError()"
+            label = "Email:"
+            width = "100%"
+        >
+        </app-input>
 
         <div formGroupName="passwordGroup">
 

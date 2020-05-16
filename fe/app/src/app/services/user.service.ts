@@ -112,10 +112,11 @@ export class UserService {
         this.user.next({username: null})
     }
 
-    signUp = (username: string, password: string) => {
+    signUp = (username: string, email: string, password: string) => {
         return this.http.post('auth/signUp',{
         //return this.http.get('auth/secret/jwt',{
             username,
+            email,
             password
 
         }).pipe(

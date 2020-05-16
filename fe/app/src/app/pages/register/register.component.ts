@@ -18,7 +18,6 @@ export class RegisterComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private userService: UserService) { }
 
   hasGeneralError(formControl){
-   
     return (
       (this.isSubmitted && !formControl.valid)  || 
       (!formControl.valid && formControl.touched)
@@ -40,6 +39,22 @@ export class RegisterComponent implements OnInit {
       }
 
       return 'Invalid username'
+    }
+    return ''
+
+  }
+  getEmailError(){
+    const formControl = this.signUpForm.get('email');
+
+    if(this.hasGeneralError(formControl)){
+      if(formControl.errors.required){
+        return 'Please provide a value';
+      }
+      if(formControl.errors.minlength){
+        return `At least ${formControl.errors.minlength.requiredLength} characters are required`
+      }
+
+      return 'Invalid email'
     }
     return ''
 
@@ -90,12 +105,10 @@ export class RegisterComponent implements OnInit {
 
  
   doPasswordsMatch = (formGroup: FormGroup): {[key:string]: boolean} =>{
- //   console.log('formGroup ',formGroup.controls)
- 
+
       const password  = formGroup.controls.password.value
       const password2  = formGroup.controls.password2.value
    
-    //  console.log(password, password2)
       if(password !== password2){
         return {'passwordMatch': true};
       }
@@ -109,6 +122,10 @@ export class RegisterComponent implements OnInit {
       username: new FormControl(null, [
         Validators.required, 
         Validators.minLength(6),
+      ]),
+      email: new FormControl(null, [
+        Validators.required, 
+        Validators.minLength(6),
         Validators.pattern(/^[a-zA-Z\- ]+$/)
       ]),
      // passwordGroup: new FormGroup({
@@ -118,14 +135,14 @@ export class RegisterComponent implements OnInit {
           Validators.minLength(6),
        //   this.doPasswordsMatch,
   
-          Validators.pattern(/^[a-zA-Z\- ]+$/)
+          //Validators.pattern(/^[a-zA-Z\- ]+$/)
         ]),
           
         password2: new FormControl(null, [
           Validators.required, 
           
           //this.doPasswordsMatch,
-          Validators.pattern(/^[a-zA-Z\- ]+$/)
+          //Validators.pattern(/^[a-zA-Z\- ]+$/)
         ]),
         
       },
@@ -139,12 +156,16 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(){
     // todo add redirect
-    const { valid } = this.signUpForm
+
+    const { valid, value } = this.signUpForm
     this.isSubmitted = true;
-    this.userService.signUp('testuser3','12345678').subscribe(
-      res => console.log(res),
-      err => console.log(err)
-    )
+    if(valid){
+        this.userService.signUp(value.username, value.email, value.passwordGroup.password).subscribe(
+            res => console.log(res),
+            err => console.log(err)
+          )
+    }
+
 
   } 
 

@@ -7,7 +7,7 @@ import groupRoute from './groupRoute';
 // controllers
 import Users from 'app/controllers/users';
 import User from 'app/controllers/user';
-import Auth from 'app/controllers/Auth';
+import Auth from 'app/controllers/auth';
 import OAuth from 'app/controllers/oauth';
 
 

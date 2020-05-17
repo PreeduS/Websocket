@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, from, BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
+import { environment } from './../../environments/environment';
 
 import { messageType, userType, CommentData, CommentsData, UserData, UsersData, AuthData } from 'src/app/commons/types/chat';
 type MessageTypes = CommentData | CommentsData | UserData | UsersData | AuthData;
@@ -32,7 +33,8 @@ export class CommentsService {          // todo - rename to chatService
 
     openConnection = () => {
         console.log('openConnection')
-        this.socket = new WebSocket('ws://localhost:5000');
+        //this.socket = new WebSocket('ws://localhost:5000');
+        this.socket = new WebSocket(environment.endpointWS);
         this.socket.onopen = this.onOpen;
         this.socket.onclose  = this.onClose ;
         this.socket.onmessage = this.onMessage;

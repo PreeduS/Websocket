@@ -31,7 +31,7 @@ http {
 
     server {
         listen *:80;
-	listen [::]:80;
+	    listen [::]:80;
         # logs location
         access_log /var/log/nginx/access.log compression;
 
@@ -50,9 +50,15 @@ http {
 
         # Backend proxy
         location /api/ {
-         #   rewrite ^/api/(.*) $1 break;
-         #   resolver 127.0.0.11 ipv6=off;
-	     proxy_pass ${API_HOST}:${API_PORT}/;
+	        proxy_pass ${API_HOST}:${API_PORT}/;
+        }
+
+        location /ws/ {
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+
+	        proxy_pass ${API_HOST}:${API_PORT}/;
         }
 
 

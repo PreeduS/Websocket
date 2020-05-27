@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: mongo
+spec:
+    serviceName: "mongo"
+    replicas: 1
+    selector:
+        matchLabels:
+            app: mongo
+    volumeClaimTemplates: []
+    template:
+        metadata:
+            labels:
+                app: mongo
+        spec:
+            containers:
+              - name: mongo
+                image: mongo
+                env:
+                  - name: MONGO_INITDB_ROOT_USERNAME
+                    valueFrom:
+                      secretKeyRef:
+                        name: mongo-init-prod
+                        key: MONGO_INITDB_ROOT_USERNAME
+                  - name: MONGO_INITDB_ROOT_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: mongo-init-prod
+                        key: MONGO_INITDB_ROOT_PASSWORD
+                  - name: MONGO_INITDB_DATABASE
+                    valueFrom:
+                      secretKeyRef:
+                        name: mongo-init-prod
+                        key: MONGO_INITDB_DATABASE
+                ports:
+                  - containerPort: 80
+                volumeMounts:
+                  - name: mongo-init
+                    mountPath: "/docker-entrypoint-initdb.d"
+                  - name: mongo-config
+                    mountPath: "/etc/mongo"
+                  - name: mongo-data
+                    mountPath: "/data/db"
+                    
+            volumes:
+              - name: mongo-init
+                secret:
+                    secretName: mongo-init-prod
+              - name: mongo-config
+                secret:
+                    secretName: mongo-config-prod
+              - name: mongo-data
+                emptyDir: {}
+                #hostPath:
+                #  path: F:\\projects\\websocket\\be\\data\\db
+
+
+         
+                  
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+    name: mongo
+  clusterIP: None
+  selector:
+    app: mongo
+
+
+---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#    name: mongo-init
+#type: Opaque
+#stringData:
+#    init.js: |-
+#        db = db.getSiblingDB("$MONGO_INITDB_DATABASE")
+#        db.createCollection("init")
+#        
+#        db.createUser(
+#          {
+#            user: "$MONGO_INITDB_ROOT_USERNAME",
+#            pwd: "$MONGO_INITDB_ROOT_PASSWORD",
+#            roles: [ { role: "readWrite", db: "$MONGO_INITDB_DATABASE" }]
+#          }
+#        )

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  template:
+    spec:
+      containers:
+      - name: testapp-be
+        image: preedus/testapp-be:v1
+        #image: nginx:1.14.2
+        #imagePullPolicy: Never
+        volumeMounts:
+        - name: secret-volume
+          mountPath: /home/node/backend/.env
+          subPath: .env
+        ports:
+        - containerPort: 5000
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: backend-env-secret-prod
+      #- name: config-volume
+      #  configMap:
+      #    name: backend-config

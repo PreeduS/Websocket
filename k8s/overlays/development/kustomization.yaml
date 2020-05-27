@@ -1,0 +1,7 @@
+#namePrefix: dev-
+nameSuffix: -dev
+commonLabels:
+    #- path: metadata/labels
+      variant: dev
+bases:
+    - ../../base

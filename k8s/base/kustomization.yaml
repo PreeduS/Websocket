@@ -1,0 +1,21 @@
+generatorOptions:
+  #disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: frontend-configmap
+    literals:
+      - API_HOST=localhost
+      - API_PORT=3000
+
+
+
+secretGenerator:
+  - name: backend-env-secret
+    literals:
+      - key1=base
+
+
+resources:
+    - frontend.yaml
+    - backend.yaml
+    - service.yaml

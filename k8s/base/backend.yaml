@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: testapp-be
+        image: preedus/testapp-fe:v1
+        #image: nginx:1.14.2
+        imagePullPolicy: Never
+        #volumeMounts:
+        #- name: config-volume
+        #  mountPath: /etc/config
+        ports:
+        - containerPort: 3000
+      #volumes:
+      #- name: config-volume
+      #  configMap:
+      #    name: backend-config
+
+

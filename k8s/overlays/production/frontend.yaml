@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: testapp-fe
-        image: preedus/testapp-fe:v1
+        image: preedus/testapp-fe:v1.1
         env:
         - name: API_HOST
           valueFrom:
@@ -22,7 +22,7 @@ spec:
                 key: API_PORT
         #  value: "5000"
 
-        imagePullPolicy: Never
+        #imagePullPolicy: Never
         ports:
         - containerPort: 80
 

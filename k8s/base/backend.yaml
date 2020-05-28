@@ -16,7 +16,7 @@ spec:
       - name: testapp-be
         image: preedus/testapp-fe:v1
         #image: nginx:1.14.2
-        imagePullPolicy: Never
+        #imagePullPolicy: Never
         #volumeMounts:
         #- name: config-volume
         #  mountPath: /etc/config

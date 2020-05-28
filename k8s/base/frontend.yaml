@@ -17,7 +17,7 @@ spec:
       containers:
       - name: testapp-fe
         image: preedus/testapp-fe:v1
-        imagePullPolicy: Never
+        #imagePullPolicy: Never
         #volumeMounts:
         #- name: config-volume
         #  mountPath: /etc/config

@@ -9,10 +9,10 @@ configMapGenerator:
 
 
 
-secretGenerator:
-  - name: backend-env-secret
-    literals:
-      - key1=base
+#secretGenerator:
+#  - name: backend-env-secret
+#    literals:
+#      - key1=base
 
 
 resources:

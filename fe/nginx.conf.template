@@ -30,8 +30,8 @@ http {
     gzip_types text/plain text/css application/javascript application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
 
     server {
-        listen *:80;
-	    listen [::]:80;
+        listen *:${PORT};
+	    listen [::]:${PORT};
         # logs location
         access_log /var/log/nginx/access.log compression;
 

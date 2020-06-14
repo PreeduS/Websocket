@@ -6,6 +6,7 @@ configMapGenerator:
     literals:
       - API_HOST=localhost
       - API_PORT=3000
+      - PORT=3000
 
 
 

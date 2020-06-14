@@ -1,6 +1,5 @@
 
 
-
 kubectl apply -k  ./base
 kubectl apply -k  ./overlays/production
 

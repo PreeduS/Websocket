@@ -12,6 +12,7 @@ configMapGenerator:
     literals:
       - API_HOST="http://backend-prod.default.svc.cluster.local"
       - API_PORT="5000"
+      - PORT="30007"
 
 #secretGenerator:
 #  - name: backend-env-secret

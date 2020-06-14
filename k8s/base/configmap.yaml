@@ -6,3 +6,4 @@ metadata:
 data:
   API_HOST: localhost
   API_PORT: 3000
+  PORT: 80

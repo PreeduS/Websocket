@@ -19,6 +19,11 @@ spec:
             configMapKeyRef:
                 name: frontend-configmap
                 key: API_PORT
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+                name: frontend-configmap
+                key: PORT
 
         #imagePullPolicy: Never
         ports:

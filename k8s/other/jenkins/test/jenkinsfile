@@ -1,5 +1,3 @@
-//def is_fe
-//def is_be
 
 def frontend_dir = "fe"
 def backend_dir = "be"
@@ -11,27 +9,16 @@ def APP_FE_TAG="v1.1"
 def APP_BE="testapp-be"
 def APP_BE_TAG="v1.1"
 
+def OVERLAY_PATH_PROD = "k8s/overlays/production"
+
 
 def appBuild(dockerUser,imageName, tag){
 
 //WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
 //https://docs.docker.com/engine/reference/commandline/login/#credentials-store
-/*
-    sh 'ls -la'
-    withCredentials([usernamePassword(credentialsId: 'dockerhub-user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        sh "echo Building fe image dockerUser: $dockerUser/$imageName:$tag"
-        sh "echo Building fe image USERNAME: $USERNAME/$imageName:$tag"
-        sh "docker login -u $USERNAME -p $PASSWORD"
-        sh "docker build -t $USERNAME/$imageName:$tag ."
-        sh "docker push $USERNAME/$imageName:$tag"
-        sh "docker logout"
-
-    }
-    */
 
 
     withCredentials([string(credentialsId: 'dockerhub-password', variable: 'PASSWORD')]) { 
-        //sh "echo Building image $dockerUser/$imageName:$tag"
         echo "Building image $dockerUser/$imageName:$tag"
         //sh "docker login -u $dockerUser -p $PASSWORD"
         sh "echo $PASSWORD | docker login -u $dockerUser --password-stdin"
@@ -76,9 +63,12 @@ pipeline {
         stage("pre-build") {
         
             steps {
+                           
+                echo "GIT_BRANCH = $GIT_BRANCH"
+                echo "BUILD_NUMBER = $BUILD_NUMBER"
+
                 dir('tmpdir') {
-    
-                
+     
                     //sh 'git clone https://github.com/PreeduS/Websocket .'
                                             
                         
@@ -87,18 +77,15 @@ pipeline {
                         env.is_fe=sh script:'git diff-tree --name-only --no-commit-id HEAD | grep -q fe && echo 0 || echo 1', returnStdout: true
                         env.is_be=sh script:'git diff-tree --name-only --no-commit-id HEAD | grep -q be && echo 0 || echo 1', returnStdout: true
                         
-                        //env.is_be=sh script:'echo $(git diff-tree --name-only --no-commit-id HEAD | grep -q be && echo 0 || echo 1)', returnStdout: true
                     }    
                         
-                    //sh 'echo is_fe post = $is_fe'
-                    //sh 'echo is_be post = $is_be'
                     
                     sh '''
                         if [ $is_fe -eq 0 ]; then
-                            echo "Is frontend $is_fe"
+                            echo "Frontend changes"
                         fi
                         if [ $is_be -eq 0 ]; then
-                            echo "Is backend $is_be"
+                            echo "Backend changes"
                         fi
                         if [ $is_fe -ne 0 -a $is_be -ne 0 ]; then 
                             echo "Nothing to build, exiting..."; 
@@ -120,13 +107,9 @@ pipeline {
             steps {
 
                 //echo "building version ${NEW_VERSION}"
-                //echo "build is_fe = ${env.is_fe}"
-                //echo "build is_be = ${env.is_be}"
 
-            
                 script {
                     env.FE_TAG = APP_FE_TAG
-                    //'v1.1'
                 }
 
                 dir("tmpdir/$frontend_dir") {

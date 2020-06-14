@@ -14,13 +14,11 @@ spec:
             configMapKeyRef:
                 name: frontend-configmap
                 key: API_HOST
-        #  value: "http://backend-prod.default.svc.cluster.local"
         - name: API_PORT
           valueFrom:
             configMapKeyRef:
                 name: frontend-configmap
                 key: API_PORT
-        #  value: "5000"
 
         #imagePullPolicy: Never
         ports:

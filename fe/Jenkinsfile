@@ -1,0 +1,97 @@
+
+pipeline {
+    agent any
+
+    
+    environment {
+        NEW_VERSION = '1.2.3'
+        is_fe=10
+        is_be=10
+ 
+    }
+    stages {
+
+        stage('Clone repository') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage("pre-build") {
+        
+            steps {
+                echo "pre-build"
+
+                sh 'echo is_fe pre = $is_fe'
+                sh 'echo is_be pre = $is_be'
+
+                sh 'is_fe=$(git diff-tree --name-only --no-commit-id HEAD | grep -q fe && echo 0 || echo 1)'
+                sh 'is_be=$(git diff-tree --name-only --no-commit-id HEAD | grep -q be && echo 0 || echo 1)'
+
+                sh 'echo is_fe post = $is_fe'
+                sh 'echo is_be post = $is_be'
+
+                sh '''
+                    if [ $is_fe -eq 0 ]; then
+                        echo "is frontend $is_fe"
+                    fi
+                    if [ $is_be -eq 0 ]; then
+                        echo "is backend $is_be"
+                    fi
+                    if [ $is_fe -ne 0 -a $is_be -ne 0 ]; then 
+                        echo "Nothing to build, exiting..."; 
+                        exit 0
+
+                    fi
+
+                '''
+            }
+            // if [[ $a -lt 42 || $a -gt 100 ]]; then
+            // [ $a -lt 20 -a $b -gt 100 ] is false.
+            
+            // if [ $is_fe -ne 0 -a $is_be -ne 0 ]; then echo "break"; fi
+            // if [ $is_fe -ne 0 ] && [ $is_be -ne 0 ]; then echo "break"; fi
+
+        }
+        stage("build") {
+        
+            steps {
+                echo "building version ${NEW_VERSION}"
+                sh 'ls'
+                sh 'echo is_fe build = $is_fe'
+                sh 'echo is_be build = $is_be'
+                echo "build is_fe = $is_fe"
+                echo "build is_be = $is_be"
+
+
+
+                nodejs('node-12.16.3') {
+                    sh 'npm install'
+                    sh 'npm build'
+                }
+            }
+            
+        }
+
+        stage("test") {
+
+            steps {
+                echo "test"
+            }
+            
+        }
+
+        stage("deploy") {
+        
+            steps {
+            
+                echo "deploy"
+            
+            }
+            
+        }
+
+
+    }
+
+}

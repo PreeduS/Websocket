@@ -2,8 +2,7 @@
 # namePrefix: prod-
 nameSuffix: -prod
 commonLabels:
-    #- path: metadata/labels
-      variant: prod
+    variant: prod
 bases:
     - ../../base
 

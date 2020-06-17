@@ -74,22 +74,3 @@ spec:
   selector:
     app: mongo
 
-
----
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#    name: mongo-init
-#type: Opaque
-#stringData:
-#    init.js: |-
-#        db = db.getSiblingDB("$MONGO_INITDB_DATABASE")
-#        db.createCollection("init")
-#        
-#        db.createUser(
-#          {
-#            user: "$MONGO_INITDB_ROOT_USERNAME",
-#            pwd: "$MONGO_INITDB_ROOT_PASSWORD",
-#            roles: [ { role: "readWrite", db: "$MONGO_INITDB_DATABASE" }]
-#          }
-#        )

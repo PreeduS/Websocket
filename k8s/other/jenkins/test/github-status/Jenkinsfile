@@ -1,0 +1,73 @@
+def DOCKER_USER="preedus"
+def APP_FE="testapp-fe"
+
+
+// pending, success, failure
+def setGithubStatus(state){
+
+    withCredentials([string(credentialsId: 'github-status', variable: 'TOKEN')]) { 
+        echo "Build status: $state"
+
+        sh """
+            curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/preedus/websocket/statuses/\$(echo null) -d "{
+            \"state\": \"$state\",
+            \"description\": \"Build status: $state\"
+            }"
+        """
+
+        // \"target_url\": \"${BUILD_URL}\",
+
+        // curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/preedus/websocket/statuses/\$(git rev-parse HEAD) -d "{
+
+
+        //  curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/:organization/:repos/statuses/$(git rev-parse HEAD)
+        // /repos/:organization/:repos/statuses/
+        // /repos/:owner/:repo/statuses/:sha
+
+        // curl "https://api.GitHub.com/repos/<GitHubUserName>/<REPO_NAME>/statuses/$GIT_COMMIT?access_token=<YOUR_GITHUB_TOKEN>" \
+        // https://api.github.com/repos/preedus/websocket
+    }
+
+}
+
+
+
+pipeline {
+    agent any
+
+    stages {
+        stage("github-status") {
+            steps {
+                    script {
+                                                     
+                        //setGithubStatus('pending')
+
+                        env.fe_build=sh script:"""
+
+                            sudo docker build -t "$DOCKER_USER/$APP_FE:temp" . && \
+                            sudo docker run --network="app-net" \
+                            --name app-fe-container -p 80:80 \
+                            --restart=always -d \
+                            -e API_HOST=http://192.168.100.20 \
+                            -e API_PORT=5000 \
+                            "$DOCKER_USER/$APP_FE:temp" && echo 0 || echo 1
+
+                        
+
+                        """, returnStdout: true
+
+
+                        sleep(10)
+
+                        if (env.fe_build == '0') {
+                           setGithubStatus('success')
+                        } else {
+                            setGithubStatus('failure')
+                        }
+                    }    
+
+            }
+        }
+    }
+
+}

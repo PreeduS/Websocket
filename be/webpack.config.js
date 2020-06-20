@@ -2,6 +2,7 @@
 const path = require('path');
 //const isDevelopment = process.env.NODE_ENV !== 'production'
 var nodeExternals = require('webpack-node-externals');
+console.log('process.env.NODE_ENV ',process.env.NODE_ENV)
 
 const config = {
     entry: {
@@ -18,7 +19,7 @@ const config = {
           }
       ]
     },
-    // mode: "development",
+     mode: process.env.NODE_ENV || "production",
     resolve: {
         extensions: [".ts", ".js", ".json"],
       alias: {

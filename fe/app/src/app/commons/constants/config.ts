@@ -1,11 +1,11 @@
 
-export const user = {
+export const validation = {
     username: {
         length:{
-            min: 6,
+            min: 8,
             max: 32,
         },
-        pattern: '^[a-zA-Z\- ]+$'
+        pattern: '^[a-zA-Z\-]+$'
 
     },
     password: {
@@ -16,8 +16,9 @@ export const user = {
     },
     email: {
         length:{
-            min: 8,
+            min: 6,
             max: 256,
         }, 
+        pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-.]+\.([a-zA-Z]+\.{0,1}[a-zA-Z]+)$/
     }
 }

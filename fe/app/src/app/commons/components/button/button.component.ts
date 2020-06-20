@@ -9,11 +9,21 @@ export class ButtonComponent implements OnInit {
    // @Input() label?: String = 'Button';
     //@Input() type? = 'button';
     @Input() submit?: boolean = false;
+    @Input() disabled?: boolean = false; 
+    @Input() themeStyle?: Object = {}; 
+    @Input() width?: string = 'auto';
     @Output() click? = new EventEmitter<any>();
+    
     constructor() { }
     
-    ngOnInit() {
+    getInputStyles = () => ({
+        width: this.width,
+        cursor: this.disabled ? 'default' : 'pointer',
+        ...this.themeStyle
+    })
 
+    ngOnInit() {
+      
     }
 
     onClick = (event) => {

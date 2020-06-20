@@ -7,14 +7,23 @@
     </div>
 
     <div class = "add-comment-wrapper">
-        <textarea (input) = "setCommentValue($event)" [value] = "commentValue"></textarea>
+        <div class = "logo"></div>
+        <textarea (input) = "setCommentValue($event)" [value] = "commentValue" [disabled] = "!chatAuthenticated"></textarea>
     </div>
-    <button (click)="addComment()">click</button>
+    <app-button width = "100%" (click)="addComment()" [disabled] = "!chatAuthenticated" 
+        [themeStyle] = "{
+            border: 0,
+            borderTop: '1px solid var(--content-border)'
+        }"
+    >Comment</app-button>
 </div>
 
 <div class = "users-wrapper">
+    <div *ngIf = "users.length === 0" class = "empty">
+        No users
+    </div>
     <div *ngFor = "let user of users" class = "user">
-        <div class="wrapper">
+        <div class="user-wrapper">
             <div class="content-left">
                 <div class="logo"></div>
             </div>

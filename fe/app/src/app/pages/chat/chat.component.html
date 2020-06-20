@@ -7,7 +7,10 @@
 
 <div class = "chat-wrapper">
     <div class = "body-wrapper">
-        <chat-body (commentChange) = "addComment($event)" [comments] = "comments" [users] = "users"></chat-body>
+        <chat-body 
+        (commentChange) = "addComment($event)" [comments] = "comments" [users] = "users"
+        [chatAuthenticated] = "chatAuthenticated"
+        ></chat-body>
     </div>
     <div class = "users-wrapper" *ngIf = "false">
         <div *ngFor = "let user of users" class = "user">
@@ -15,8 +18,6 @@
         </div>
     </div>
 </div>
-chatAuthenticated = {{chatAuthenticated}}
-username = {{username}}
 
 
-<chat-footer (commentChange) = "addComment($event)" [chatAuthenticated] = "chatAuthenticated" [username] = "username"></chat-footer>
+<chat-footer *ngIf = "false"  (commentChange) = "addComment($event)" [chatAuthenticated] = "chatAuthenticated" [username] = "username"></chat-footer>

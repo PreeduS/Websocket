@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build && node ./build-wp/index.js",
-    "start:dev": "cross-env NODE_ENV=development && npm run start",
-    "start:prod": "cross-env NODE_ENV=production && npm run start",
-    "dev": "cross-env NODE_ENV=development && concurrently \"webpack -w\" \"nodemon build-wp/index.js\"",
+    "start:dev": "cross-env-shell NODE_ENV=development npm run start",
+    "start:prod": "cross-env-shell NODE_ENV=production npm run start",
+    "dev": "cross-env NODE_ENV=development concurrently \"webpack -w\" \"nodemon build-wp/index.js\"",
     "build": "webpack",
 
     "_start": "npm run build && node -r ./setupAlias.js ./build/index.js",

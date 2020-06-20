@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-
 import { getUsernameErrorLabel, getPasswordErrorLabel } from 'src/app/commons/helpers/validation';
-import { user } from 'src/app/commons/constants/validation';
+import { validation } from 'src/app/commons/constants/config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,17 +14,17 @@ export class SignInComponent implements OnInit {
   signInForm: FormGroup;
   private isSubmitted = false;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
     this.signInForm = new FormGroup({
       username: new FormControl(null, [
         Validators.required, 
-        Validators.minLength(user.username.length.min), 
+        Validators.minLength(validation.username.length.min), 
       ]),
       password: new FormControl(null, [
         Validators.required, 
-        Validators.minLength(user.password.length.min), 
+        Validators.minLength(validation.password.length.min), 
       ]),
  
 
@@ -47,7 +47,11 @@ export class SignInComponent implements OnInit {
     const { username, password } = this.signInForm.value;
  
     this.userService.signIn(username, password).subscribe(
-      res => console.log(res),
+      res => {
+        console.log(res)
+        this.router.navigate(['/'])
+       // window.location.href = '/'
+      },
       err => console.log(err)
     )
 

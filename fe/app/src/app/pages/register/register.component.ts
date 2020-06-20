@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service'
+import { validation } from 'src/app/commons/constants/config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +17,7 @@ export class RegisterComponent implements OnInit {
 
   private isSubmitted = false;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService) { }
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
 
   hasGeneralError(formControl){
     return (
@@ -121,18 +123,18 @@ export class RegisterComponent implements OnInit {
     this.signUpForm = new FormGroup({
       username: new FormControl(null, [
         Validators.required, 
-        Validators.minLength(6),
+        Validators.minLength(validation.username.length.min),
       ]),
       email: new FormControl(null, [
         Validators.required, 
-        Validators.minLength(6),
-        Validators.pattern(/^[a-zA-Z\- ]+$/)
+        Validators.minLength(validation.email.length.min),
+        Validators.pattern(validation.email.pattern)
       ]),
      // passwordGroup: new FormGroup({
       passwordGroup: this.formBuilder.group({
         password: new FormControl(null, [
           Validators.required, 
-          Validators.minLength(6),
+          Validators.minLength(validation.password.length.min),
        //   this.doPasswordsMatch,
   
           //Validators.pattern(/^[a-zA-Z\- ]+$/)
@@ -161,7 +163,10 @@ export class RegisterComponent implements OnInit {
     this.isSubmitted = true;
     if(valid){
         this.userService.signUp(value.username, value.email, value.passwordGroup.password).subscribe(
-            res => console.log(res),
+            res => {
+              console.log(res)
+              //this.router.navigate(['/'])
+            },
             err => console.log(err)
           )
     }

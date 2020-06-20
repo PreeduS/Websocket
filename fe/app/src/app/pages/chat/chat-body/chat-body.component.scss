@@ -1,17 +1,15 @@
 :host{
     display: flex;
     flex:1;
-    //border: 1px solid rgb(230, 230, 230);
     min-height: 60vh;
-    max-height: calc(100vh - 20rem);
+    height: 80vh;
+    max-height: calc(100vh - 10rem);
 }
 
 .chat-wrapper{
     display: flex;
     flex:1;
     flex-direction: column;
-
-    //background: rgb(240, 240, 240); 
     border: 1px solid var(--content-border);
 
     .comments-wrapper {
@@ -22,19 +20,25 @@
     }
     .add-comment-wrapper{
         display: flex;
-        height: 5rem;
+        height: 5.5rem;
+        padding: 0 0.5rem;
         border-top: 1px solid var(--content-border);
-        
+
+        .logo{
+            border: 1px solid var(--content-border);
+            width: 3rem;
+            height: 3rem;
+            margin-top: .25rem;
+        }
+    
         textarea {
             resize: none;
             background: transparent;
             border: none;
             outline: none;
             flex: 1;
-            padding: .25rem;
-            padding-left: 0;
-            padding-right: 1rem;
-            margin-left: 3.5rem;
+            padding: .25rem 0;
+            margin-left: .75rem;
         }
     }
     
@@ -47,16 +51,24 @@
     display: flex;
     flex-direction: column;
     flex: 0 0 14rem;
-    padding: .5rem;
+    width: 14rem;
+    //padding: .5rem;
     border: 1px solid var(--content-border);
     margin-left: 1rem;
     overflow-y: auto;
     //background: rgb(235, 235, 235); 
     //background: rgb(240, 240, 240); 
-    .wrapper{
+    .empty{
+        text-align: center;
+        padding: .5rem;
+        font-weight: bold;
+        border-bottom: 1px solid var(--content-border);
+    }
+    .user-wrapper{
         display: flex;
-        width: 100%;
-        margin-bottom: .5rem;
+        //width: 100%;
+        //margin-bottom: .5rem;
+        margin: .5rem;
 
         .content-left {
             .logo{
@@ -71,9 +83,12 @@
             display: flex;
             flex: 1;
             margin-left: .5rem;
+            overflow:hidden;
             .username{
                 margin: auto 0;
-                
+                overflow:hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
     
     

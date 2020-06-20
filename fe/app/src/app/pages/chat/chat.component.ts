@@ -139,6 +139,7 @@ test(event) {
         })
 
         this.commentsService.isAuthenticated().subscribe((authenticated => {
+            console.log('chatAuthenticated  ', authenticated)
             this.chatAuthenticated = authenticated;
       
         }))

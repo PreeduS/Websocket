@@ -1,4 +1,4 @@
-<button class = "wrapper" [type] = "submit ? 'submit': 'button'" (click) = "onClick($event)">
+<button class = "wrapper" [type] = "submit ? 'submit': 'button'" (click) = "onClick($event)" [ngStyle] = "getInputStyles()" [disabled] = "disabled">
     <div class="content">
         <ng-content></ng-content>
     </div>

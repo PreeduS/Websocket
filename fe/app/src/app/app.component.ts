@@ -25,6 +25,7 @@ export class AppComponent implements OnInit{
   signOut(){
     console.log('signOut')
     this.userService.signOut()
-    this.router.navigate(['/'])
+    //this.router.navigate(['/'])
+    window.location.href = '/'
   }
 }

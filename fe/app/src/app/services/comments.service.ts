@@ -10,7 +10,7 @@ type MessageTypes = CommentData | CommentsData | UserData | UsersData | AuthData
   providedIn: 'root',
 })
 export class CommentsService {          // todo - rename to chatService
-    private socket; 
+    private socket:WebSocket; 
     private commentSub: Subject<{username: string, comment: string}>; //= new Subject<any>();
     private commentsSub: Subject<Array<{comment: string, username: string}>>;
     private userSub: Subject<UserData['data']>; 
@@ -60,6 +60,7 @@ export class CommentsService {          // todo - rename to chatService
         const accessToken = this.userService.getAccessToken();
         const refreshToken = this.userService.getRefreshToken();
         if(accessToken && refreshToken){
+            // if this.socket.readyState === 1        // open
             this.socket.send(JSON.stringify({
                 type: messageType.auth,
                 data:  {
@@ -71,6 +72,7 @@ export class CommentsService {          // todo - rename to chatService
 
     }
     private onSignInMessage = (data) => {
+        console.log('chat auth data',data)
         const authenticated = data.authenticated || false;
         // get accessToken
         this.authenticated.next(authenticated)

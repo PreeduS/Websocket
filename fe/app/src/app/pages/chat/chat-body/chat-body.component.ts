@@ -29,13 +29,7 @@ export class ChatBodyComponent implements OnInit {
     })
 
   }
-  ngAfterViewInit() {
 
-    //const commentsWrapperRef = this.commentsWrapper.nativeElement;
-    //console.log('commentsWrapperRef ',commentsWrapperRef,commentsWrapperRef.scrollHeight)
-    //commentsWrapperRef.scrollTop = commentsWrapperRef.scrollHeight
-
-  }
 
   addComment(){
     this.commentChange.emit(this.commentValue)
@@ -46,7 +40,7 @@ export class ChatBodyComponent implements OnInit {
     ngAfterViewChecked(){
     if(this.commentsLength !== this.comments.length ){
 
-      //console.log('ngDoCheck trigger', this.commentsLength, this.comments.length)
+
       const commentsWrapperRef = this.commentsWrapper.nativeElement;
       const lastComment = this.comments[this.comments.length -1]
       const lastCommentUsername = lastComment && lastComment.user.username;
@@ -56,7 +50,6 @@ export class ChatBodyComponent implements OnInit {
     //  console.log('commentsWrapperRef.scrollTop', commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight)
     //  console.log('commentsWrapperRef.dif', commentsWrapperRef.scrollHeight-(commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight),'\n\n')
     const scrollFromBottom = commentsWrapperRef.scrollHeight- (commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight);
-    console.log('scrollFromBottom after',scrollFromBottom, this.comments, selfComment)
 
 
     if(!this.snappedToBottom){

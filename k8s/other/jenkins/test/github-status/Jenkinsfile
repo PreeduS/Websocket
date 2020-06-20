@@ -7,15 +7,16 @@ def setGithubStatus(state){
 
     withCredentials([string(credentialsId: 'github-status', variable: 'TOKEN')]) { 
         echo "Build status: $state"
+        sh "echo hash: \$(git rev-parse HEAD)"
 
         sh """
-            curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/preedus/websocket/statuses/\$(echo null) -d "{
+            curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/preedus/websocket/statuses/\$(git rev-parse HEAD) -d '{
             \"state\": \"$state\",
-            \"description\": \"Build status: $state\"
-            }"
+            \"description\": \"Build status: $state\",
+            \"target_url\": \"http://kmaster-v2:30008/job/status-test/$BUILD_URL/console\"
+            }'
         """
 
-        // \"target_url\": \"${BUILD_URL}\",
 
         // curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/preedus/websocket/statuses/\$(git rev-parse HEAD) -d "{
 
@@ -38,10 +39,13 @@ pipeline {
     stages {
         stage("github-status") {
             steps {
+                dir('tmpdir') {
                     script {
-                                                     
+                        //sh 'git clone https://github.com/PreeduS/Websocket .'
+                        //sh 'git checkout -b test-branch-prevention origin/test-branch-prevention'
                         //setGithubStatus('pending')
-
+                        env.fe_build="1"
+                        /*
                         env.fe_build=sh script:"""
 
                             sudo docker build -t "$DOCKER_USER/$APP_FE:temp" . && \
@@ -55,7 +59,7 @@ pipeline {
                         
 
                         """, returnStdout: true
-
+                        */
 
                         sleep(10)
 
@@ -65,9 +69,17 @@ pipeline {
                             setGithubStatus('failure')
                         }
                     }    
-
+                }
             }
         }
     }
+
+    post {
+        always{
+            //sh 'rm -rf tmpdir'
+            sh "echo done"
+        }
+    }
+
 
 }

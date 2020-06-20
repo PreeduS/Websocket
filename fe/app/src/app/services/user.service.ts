@@ -122,22 +122,7 @@ export class UserService {
         }).pipe(
             map((response:any) => {
                 console.log('z ',response); 
-                /*const { accessToken, refreshToken } = response;
-                if(accessToken && refreshToken){
-                    try{
-                        const decoded = this.getDecodedUser(accessToken);
-                        this.setAccessToken(accessToken);
-                        this.setRefreshToken(refreshToken);
-                        this.user.next({username: decoded.user.username})
-                    }catch(error){
-                        console.log('e ',error)
-                    }
-
-                }else{
-                    return throwError('Access Token not returned')
-                }   */
-
-                //set token
+         
                 return response;
             })
             

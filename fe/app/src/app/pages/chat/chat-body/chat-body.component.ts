@@ -50,7 +50,6 @@ export class ChatBodyComponent implements OnInit {
     //  console.log('commentsWrapperRef.scrollTop', commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight)
     //  console.log('commentsWrapperRef.dif', commentsWrapperRef.scrollHeight-(commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight),'\n\n')
     const scrollFromBottom = commentsWrapperRef.scrollHeight- (commentsWrapperRef.scrollTop + commentsWrapperRef.clientHeight);
-    console.log('scrollFromBottom after',scrollFromBottom, this.comments, selfComment)
 
 
     if(!this.snappedToBottom){

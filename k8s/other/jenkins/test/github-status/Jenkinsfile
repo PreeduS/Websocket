@@ -13,17 +13,9 @@ def setGithubStatus(state){
             curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/preedus/websocket/statuses/\$(git rev-parse HEAD) -d '{
             \"state\": \"$state\",
             \"description\": \"Build status: $state\",
-            \"target_url\": \"http://kmaster-v2:30008/job/status-test/$BUILD_URL/console\"
+            \"target_url\": \"http://kmaster-v2:30008/job/status-test/$BUILD_NUMBER/console\"
             }'
         """
-
-
-        // curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/preedus/websocket/statuses/\$(git rev-parse HEAD) -d "{
-
-
-        //  curl -XPOST -H "Authorization: token $TOKEN" https://api.github.com/repos/:organization/:repos/statuses/$(git rev-parse HEAD)
-        // /repos/:organization/:repos/statuses/
-        // /repos/:owner/:repo/statuses/:sha
 
         // curl "https://api.GitHub.com/repos/<GitHubUserName>/<REPO_NAME>/statuses/$GIT_COMMIT?access_token=<YOUR_GITHUB_TOKEN>" \
         // https://api.github.com/repos/preedus/websocket
@@ -41,10 +33,14 @@ pipeline {
             steps {
                 dir('tmpdir') {
                     script {
+                        sh 'ls -la'
                         //sh 'git clone https://github.com/PreeduS/Websocket .'
                         //sh 'git checkout -b test-branch-prevention origin/test-branch-prevention'
-                        //setGithubStatus('pending')
-                        env.fe_build="1"
+                        //sh 'git pull'
+                        
+                        setGithubStatus('pending')
+
+                        env.fe_build="0"
                         /*
                         env.fe_build=sh script:"""
 

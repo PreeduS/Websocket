@@ -19,6 +19,8 @@ import OAuth from 'app/controllers/oauth';
 
 import AuthValidation from 'app/validations/Auth'
 
+const jwtAuth = passport.authenticate('jwt', {session: false})
+
 const setupRoutes = (app: Express) => {
 app.use('/', (req, res, next) => { 
             console.log('path ',req.path)
@@ -52,7 +54,7 @@ app.use('/', (req, res, next) => {
 
 
     app.get('/user/profile/:username?', User.profile)
-    app.post('/user/imageUpload', User.imageUpload)            // sendPasswordResetMail
+    app.post('/user/imageUpload', [jwtAuth], User.imageUpload)            // sendPasswordResetMail
     app.post('/user/sendResetPasswordToken', User.sendResetPasswordToken)            // sendPasswordResetMail
     app.post('/user/resetPassword/:token', User.resetPassword)              //callback
     app.get('/test', (req, res) => {

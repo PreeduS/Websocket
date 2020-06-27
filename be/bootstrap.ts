@@ -6,7 +6,8 @@ import setupPassport from './app/auth/localStrategy/localStrategy';
 import setupRoutes from './routes/';
 
 const setupMiddleware = (app: Express) => {
-    app.use('/',bodyParser.json());
+    //app.use('/',bodyParser.json());
+    app.use('/',bodyParser.json({limit: '20mb'}));
     app.use('/',cors());
 }
 

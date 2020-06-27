@@ -10,7 +10,6 @@
     "start:prod": "cross-env-shell NODE_ENV=production npm run start",
     "dev": "cross-env NODE_ENV=development concurrently \"webpack -w\" \"nodemon build-wp/index.js\"",
     "build": "webpack",
-
     "_start": "npm run build && node -r ./setupAlias.js ./build/index.js",
     "_dev": "ts-node-dev -r tsconfig-paths/register --no-notify --files index.ts",
     "_build": "tsc",
@@ -27,6 +26,7 @@
     "@types/passport-local": "^1.0.33",
     "@types/ws": "^7.2.1",
     "@types/yup": "^0.26.30",
+    "axios": "^0.19.2",
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
     "concurrently": "^5.1.0",

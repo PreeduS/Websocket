@@ -5,6 +5,8 @@ import path from 'path';
 import userService from 'app/services/user';
 import UserSchema from 'app/mongoose/schema/user';
 import { getGeneralError, type } from 'app/common/utls/getError';
+import getUser from 'app/common/helpers/getUser'
+import axios from 'axios'
 
 class User {
     private validateUser = (req, res) => {
@@ -121,154 +123,34 @@ class User {
     }
 
 
-    private imageUploadValidation = (base64Image: string) => {
-        let returnData = { valid: false, ext: null };
-
-        const splitBy = ';base64,';
-        const splitByExists = base64Image.includes(splitBy);
-        if(splitByExists){
-            return returnData;
-        }
-        /*
-            # offset 0
-            .jpg/.jpeg
-                FF D8 FF DB
-                FF D8 FF E0
-                FF D8 FF EE
-                FF D8 FF E1
-            # end with      FF D9
-
-            .png	    89 50 4e 47
-            # end with      49 45 4E 44 AE 42 60 82
-        */
-
-        const magicNumbers = [
-            { 
-                header: 'FFD8',
-                trailer: 'FFD9',
-                ext: 'jpg' 
-            },
-            {   
-                header: '89504E47',
-                trailer: '49454E44AE426082',
-                ext: 'png'
-            },
-            {   
-                header: '424D',
-                trailer: null,
-                ext: 'bmp'
-            },
-            {   
-                header: '49492A00',
-                trailer: null,
-                ext: 'tif'
-            },
-        ]
-        const startsWith = (string, substring) => string.indexOf(substring) === 0;
-        const endsWith = (string, substring) => string.indexOf(substring, string.length - substring.length ) !== -1;
-
-        var buf = new Buffer(base64Image, 'base64');
-        const hexValue = buf.toString('hex').toUpperCase()
-        //const header = buf.slice(0,4).toString('hex').toUpperCase();                // buf.slice(0,2)
-        //const trailer = buf.slice(buf.length-12).toString('hex').toUpperCase();      // buf.slice(buf.length-2)
-
-
-        magicNumbers.forEach(mn => {
-            const validHeader =  mn.header === null ? true: startsWith(hexValue, mn.header);
-            const validTrailer =  mn.trailer === null ? true: endsWith(hexValue, mn.trailer);
-            if( validHeader && validTrailer){
-                returnData = {valid: true, ext: mn.ext};
-            }
-        });
-
-
-        return returnData
-
-
-    }
     // profile/settings
     imageUpload = async (req, res) => {
+            // todo add user validation
 
-
-
-
-        /*
-        
-            var buf = new Buffer(data, 'base64');
-
-            buf.slice(0,4)
-            fs.writeFile('image.png', buf);
-
-            buf.toString('hex')
-            // parseInt("10101001", 2).toString(16).toUpperCase()
-        */
+        const username = getUser(req).username;
+        console.log('username 1 ----',req.user, username)
+   
 
 
         const base64Upload = req.body.image;//'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA';   
-        const splitBy = ';base64,';
-        const splitByExists = base64Upload.includes(splitBy);
+   
+  
+                try {
 
-        if(splitByExists){
-            const uploadArray = base64Upload.split(splitBy);
-            const mimeType = uploadArray[0];
-            const base64Image = uploadArray[1];
+                    const response = await axios.post('http://localhost:5010/user/avatar', {
+                        base64Upload, 
+                      })
+                      return res.send(response.data)
+                }catch(e){
+                    //console.log('err',e)
+                    return res.status(500).send('e')
+                }
 
-
-
-            const validationResult = this.imageUploadValidation(base64Image);
-
-
-
-
-
-            return res.send('upload tmp')
-            
-            if(mimeType && base64Image){
-                const fileName = `image_${Date.now()}_${Math.random()*100}.png`;    // use uuid
-                const file = path.resolve('./app/static/private/'+fileName) ;
-
-
-               // if(false){
-                    fs.open(file, 'wx', (err, fd) => {
-                        if (err) {
-                          if (err.code === 'EEXIST') {
-                            console.error('file already exists');
-                            return;
-                          }
-                      
-                          throw err;
-                        }
-
-
-                        fs.writeFile(file, base64Image, {encoding: 'base64'}, function(err) {           // encoding: 'binary'
-                            if(err){
-                                console.log(err)
-                                fs.close(fd, (err) => {
-                                    if (err) throw err;
-                                });
-                                return res.send('File upload error')
-                            }
-                            fs.close(fd, (err) => {
-                                if (err) throw err;
-                            });
-                            return res.send('File created: ' + fileName)
-                        
-                        });
-
-
-
-                    
-                      });
-    
                 //}
 
 
-            }else{
-                return res.send('err')
-            }
-        }else{
-            return res.send('err2')
-        }
+    
+  
     }
 
 

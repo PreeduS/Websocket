@@ -6,3 +6,4 @@ export type User = {
 export type UserJwtPayload = {
     user: User
 }
+

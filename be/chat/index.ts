@@ -88,7 +88,6 @@ setInterval(()=>{
     ws.on('message', async (message: any) => {
         //console.log('message: ',message, ws.authenticated)
         const { data, type } = JSON.parse(message)
-        
         if(!ws.authenticated && type === messageType.auth){
             //const accessToken = data.accessToken
             const refreshToken = data.refreshToken;

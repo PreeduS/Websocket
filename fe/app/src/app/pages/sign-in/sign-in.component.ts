@@ -49,8 +49,8 @@ export class SignInComponent implements OnInit {
     this.userService.signIn(username, password).subscribe(
       res => {
         console.log(res)
-        this.router.navigate(['/'])
-       // window.location.href = '/'
+        //this.router.navigate(['/'])
+        window.location.href = '/'
       },
       err => console.log(err)
     )

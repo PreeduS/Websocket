@@ -46,6 +46,7 @@ test(event) {
     }
 
     ngOnInit(){
+        this.commentsService.openConnection();
 
         this.commentsService.getOldComments().subscribe(oldComments => {
         
@@ -143,7 +144,6 @@ test(event) {
             this.chatAuthenticated = authenticated;
       
         }))
-        this.commentsService.openConnection();
 
     }
 

@@ -4,5 +4,12 @@ be/build-wp
 be/data
 be/.env
 be/app/static/private/*
+be/app/static/public/avatar/*
+
+storage/node_modules
+storage/build
+storage/build-wp
+storage/app/static/public/avatar/*
+
 fe/node_modules
 fe/app/node_modules
